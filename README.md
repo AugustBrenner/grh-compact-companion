@@ -78,7 +78,7 @@ To audit soundness without reading 114k lines of proof tactics, inspect the **29
 ## Errata & Mathematical Feedback
 
 Mathematical corrections, notation improvements, Lean-alignment catches, and readability suggestions are warmly welcome:
-- Open an issue using the **[Mathematical / Lean Errata](../../issues/new?template=errata.md)** or **[Readability / Exposition Feedback](../../issues/new?template=readability.md)** template.
+- Open an issue using the **[Mathematical / Lean Errata](https://github.com/AugustBrenner/grh-compact-companion/issues/new?template=errata.md)** or **[Readability / Exposition Feedback](https://github.com/AugustBrenner/grh-compact-companion/issues/new?template=readability.md)** template.
 - Please include section/page numbers (or Lean `file:line` references) so issues can be audited and fixed cleanly in tagged Zenodo revisions.
 
 ---

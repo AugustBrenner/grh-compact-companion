@@ -18,7 +18,7 @@ This Lean 4.35 formalization packages the **byte-for-byte unmodified** upstream 
 ## Verification Commands
 
 ```bash
-export ELAN_HOME="$PWD/.elan" XDG_CACHE_HOME="$PWD/.cache" PATH="$PWD/.elan/bin:$PATH"
+lake exe cache get
 lake build
 lake env lean scripts/PrintAxioms.lean
 for f in src/Readable/Step*.lean; do lake env lean "$f"; done
