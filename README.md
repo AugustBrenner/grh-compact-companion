@@ -17,7 +17,7 @@
 
 The proof of the Generalized Riemann Hypothesis (GRH) for Dirichlet $L$-functions—and hence the classical Riemann Hypothesis (RH)—is due to **Levent Alpöge (with Claude)** ([`alpo.ge/remark.pdf`](https://alpo.ge/remark.pdf), linking to `alpo.ge/lean.tar.gz.part01`–`14`). Separately, Anthropic released a shorter rewriting in [`lsernau/grh-lean`](https://github.com/lsernau/grh-lean) (commit `72fead1`, Copyright 2026 Anthropic, PBC, Apache 2.0), containing `grh/` (readable edition) and `grh-compact/` (compact edition).
 
-Inside [`lean/`](./lean/), all 794 upstream source files in `src/Lib/` (`77,850` LOC), `src/New/` (`34,948` LOC), `src/Main.lean`, `src/Statements.lean` (`29` LOC), and `lake-manifest.json` are packaged **byte-for-byte unmodified** from `lsernau/grh-lean` (`grh-compact/`, commit `72fead1`).
+Inside [`lean/`](./lean/), all 794 upstream source files in `src/Lib/` (`77,850` LOC), `src/New/` (`34,948` LOC), `src/Main.lean` (`13` LOC), `src/Statements.lean` (`16` LOC; `29`-line trust surface), and `lake-manifest.json` are packaged **byte-for-byte unmodified** from `lsernau/grh-lean` (`grh-compact/`, commit `72fead1`).
 
 This repository adds:
 1. **`paper_c.pdf` / `paper_c.tex`**: An expository companion translating the global architecture of `grh-compact` from Stepanov's 1969 polynomial method over $\mathbb{F}_p$ to $\mathbb{Z}$, highlighting four core mechanisms of `grh-compact` (Cauchy-moment window eliminating Siegel–Walfisz from the analytic endgame, rank-2 Siegel-discriminant global sieve, full-chain generating-function Hecke inversion, and Higman's operator in Ribet's method). Every theorem carries an explicit status line distinguishing complete prose proofs from sketches and Lean-backed summaries.
@@ -69,7 +69,7 @@ lake build
 lake env lean scripts/PrintAxioms.lean
 for f in src/Readable/Step*.lean; do lake env lean "$f"; done
 ```
-Every theorem in `src/Main.lean` (5 root theorems) and `src/Readable/` (15 walkthrough theorems) depends only on `[propext, Classical.choice, Quot.sound]`.
+Every theorem in `src/Main.lean` (5 root theorems) and `src/Readable/` (15 walkthrough theorems) depends only on `[propext, Classical.choice, Quot.sound]`. All 799 source files under `lean/src/` contain zero `sorry`, `admit`, custom `axiom`, `unsafe`, `native_decide`, or `implemented_by` tokens (the separate, unimported upstream file [`lean/Challenge.lean`](./lean/Challenge.lean) contains five intentional `sorry` stubs used by `Comparator` verification, matching the disclosure in §9.2 of `paper_c.pdf`).
 
 To audit soundness without reading 114k lines of proof tactics, inspect the **29-line trust surface**: [`lean/src/Statements.lean`](./lean/src/Statements.lean) and [`lean/src/Main.lean`](./lean/src/Main.lean), verify byte-for-byte parity with `lsernau/grh-lean@72fead1`, and run the build and `PrintAxioms.lean`.
 

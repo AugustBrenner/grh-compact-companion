@@ -18,6 +18,16 @@ keywords:
   - "Landau lemma"
   - "Lean 4"
   - "formal verification"
+preferred-citation:
+  type: unpublished
+  title: "The Riemann Hypothesis via Multiplicity Chains: An Exposition and Lean 4 Companion to the Alpöge–Claude Proof"
+  authors:
+    - family-names: "Brenner"
+      given-names: "August"
+      affiliation: "Independent Researcher"
+      orcid: "https://orcid.org/0000-0003-1569-321X"
+  year: 2026
+  url: "https://github.com/AugustBrenner/grh-compact-companion"
 references:
   - type: article
     title: "Untitled four-page note announcing a Lean 4 proof of the Generalized Riemann Hypothesis"
