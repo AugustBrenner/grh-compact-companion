@@ -111,7 +111,7 @@ lemma one_prime_first_order (a : H →* Multiplicative (ZMod m)) (B : _ →+ R) 
       apply map_eq_of_weights_modEq σ hm; simp [v, diff, fun g ↦ a.transfer_def (g⁻¹ • default) g,
         mul_assoc, smul_apply_eq_smul_apply_inv_smul, leftQuotientEquiv_apply _]; congr!; simp
     -- small orders: the weight a (a + k) and its translate (a - k) a differ by 2 k a
-    simpa (disch := simp_intro x [v]; ring_nf) [← e₂, mul_assoc, (@hc U (sum_mem (by tauto)) _).eq,
+    simpa (disch := simp_intro x [v]; ring) [← e₂, mul_assoc, (@hc U (sum_mem (by tauto)) _).eq,
       -map_sub, -nsmul_eq_mul, map_eq_of_weights_modEq σ hm _ _ ((2 * k) • v)]
       using congr(σ (T * $(h₁ fun x ↦ -v x * (v x + k)) * U))
   rw [sub_one_mul, mul_weightedSum, ← map_sub, map_mul, map_eq_of_weights_modEq σ hm _ _ (-2 *

@@ -13,7 +13,7 @@ import Mathlib.Tactic.Ring
 /-!
 # Step 2: Behrend's Sphere Construction for Weighted 3-Term Ratios
 
-Standalone Mathlib-only proof of **Proposition 4.5 of Paper C** (Behrend, 1946):
+Standalone Mathlib-only proof of **Proposition 4.7 of Paper C** (Behrend, 1946):
 1. No-carry base-`B` encoding (`baseEncode_lt_pow`, `baseEncode_injective`, `baseEncode_linear`).
 2. Dense sphere (`exists_dense_sphere`): some sphere in `{0, ..., M - 1}^n` has `≥ M^n / (n M²)` points.
 3. Strict convexity (`sphere_no_weighted_midpoint`): weighted parallelogram identity forces collinear points on a sphere to coincide.
@@ -123,7 +123,7 @@ lemma sphere_no_weighted_midpoint {n : ℕ} {α α' R : ℕ} (hα : 0 < α) (hα
   have hα'Z : (0 : ℤ) < α' := by exact_mod_cast hα'
   exact_mod_cast sub_eq_zero.mp (sq_eq_zero_iff.mp (by nlinarith : ((u i : ℤ) - v i) ^ 2 = 0))
 
-/-- **Proposition 4.5 of Paper C (`Readable.BehrendSphere.behrend_three_term_free`).** -/
+/-- **Proposition 4.7 of Paper C (`Readable.BehrendSphere.behrend_three_term_free`).** -/
 theorem behrend_three_term_free {G H : Type*} [CommGroup G] [CommGroup H]
     (φ : G →* H) (c g : G) (n M L : ℕ) (hL : 0 < L) (hord : (L * M) ^ n ≤ orderOf (φ g)) :
     ∃ T : Finset G, (∀ σ ∈ T, ∃ e : ℕ, σ = c * g ^ e) ∧

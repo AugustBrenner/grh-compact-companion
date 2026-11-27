@@ -150,7 +150,7 @@ lemma Data.short_forms : ∃ q > (0 : ℚ), ∃ B, B = (q : ℂ) • D.projected
     (G 1) (by simpa [two_mul, exp_add, exp_log, q0, sq] using k.2 σ ·) ·)).trans (by
     grw [e, heightPerRow_le, Int.floor_le]
     simp [sub_mul, -mem_filter, -union_singleton]
-    grw [sum_allowedLoss_mul_log_le]; ring_nf; simpa using D.le_of_hasLogBound)⟩, fun t n y h ↦
+    grw [sum_allowedLoss_mul_log_le]; ring; simpa using D.le_of_hasLogBound)⟩, fun t n y h ↦
     ⟨fun l ↦ #t * finrank ℂ D.Column * (_ * log l),
     fun U ↦ by grw [← mul_sum, sum_allowedLoss_mul_log_le], fun l _ ι ϑ c ↦
     (exists_indexDvd_Bmu_divisible (Int.ceil_lt_add_one _)).elim fun n a ↦ a.2.elim fun _ b ↦

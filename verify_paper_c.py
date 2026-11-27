@@ -583,7 +583,6 @@ def check_exact_remainder_identity_and_scales():
                 assert k % 2 == 0, (r, m, k)
                 z_lo = 7 * (m // 2)
                 z_hi = z_lo + k // 2
-                assert 2 * (z_hi - z_lo) == k
                 if r >= 6 * m + 1:
                     assert z_lo > m and z_hi <= r, (r, m, z_lo, z_hi)
     assert F(1, 2) - 8 * F(1, 100) == F(21, 50) > 0
@@ -595,7 +594,7 @@ def check_exact_remainder_identity_and_scales():
 
     # Spot-check the (*) absorption inequality
     #   4*L_cov + 4*x^99 + 10*log(1 + b^2)*B <= f*a*(log b)^5
-    # under weaker sufficient scale inequalities drawn from Table 2:
+    # under weaker sufficient scale inequalities drawn from Table 3:
     #   x^{10^6} <= x_1, x_1^{10^6} <= b  =>  x^{10^{12}} <= b,
     #   (log b)^{100} <= x,  a >= x*b,  f >= 1,  B = f*a*(log b)^3,  L_cov = f*a*(log b)^4,
     #   log b >= 25.
@@ -669,11 +668,11 @@ def check_exact_remainder_identity_and_scales():
         "exact_rem_id_finite_instance": {"q0": q0, "T": T, "q1": q1, "symbolic_components": dim},
         "exact_rem_id_matches_identically": True,
         "k_even_for_odd_r_even_m": True,
-        "main_pair_doubled_count_equals_k": True,
+        "main_pair_range_fits_in_m_to_r": True,
         "grh_eps_margin_sample_verified": True,
         "star_sufficient_scale_spot_checks_note": (
             "Spot checks of weaker sufficient bounds (x^{10^12}<=b, (log b)^{100}<=x, a>=xb, f>=1, log b>=25); "
-            "omits log(log b)>=10^{12} C_P. Analytic proof is in paper_c.tex Theorem 4.9 / Step4_MainProof.lean."
+            "omits log(log b)>=10^{12} C_P. Analytic proof is in paper_c.tex (Main Inequality (*)) / Step4_MainProof.lean."
         ),
         "star_sufficient_scale_spot_checks": sufficient_scale_spot_checks,
         "reduced_non_x99_quadratic_root": round(reduced_quad_root, 6),

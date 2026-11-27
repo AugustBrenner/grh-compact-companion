@@ -84,7 +84,7 @@ lemma siegel_sum_le_lintegral_quadric {f s} {t : E} (ht : ∀ v, S.N ^ 2 < ‖Φ
     grw [one_lt_ofReal, one_lt_div (by positivity), ← pow_six_le, pow_succ]
     bound)).trans_le (mul_le_mul_right (congr(‖$key‖ₑ).le.trans' (by
     simp_rw [classSum_eq_sum, ← NNReal.coe_sum, enorm_eq_nnnorm, nnnorm_real, nnnorm_eq,
-      ofNNReal_finsetSum, ENNReal.coe_tsum (sm _)]
+      coe_finsetSum, ENNReal.coe_tsum (sm _)]
     grw [← ENNReal.tsum_prod.trans (tsum_fintype _), ← ENNReal.sum_le_tsum s]
     gcongr with z k
     grw [ite_eq_left (by simp [β, ← (hs z k).1.1]), hy z k, ← tailVector_evalPlaces]
@@ -288,6 +288,6 @@ lemma Filling.IsFillingLevel.exists_finite_sieveSystem {E 𝔰} [Field E] [CMTyp
     ← hF.box_eq.2.1, add_le_add_left hF.groupMeasure_boxSet_le, ← pow_six_le]
   any_goals simp [ENNReal.ofReal_add, pow_succ, add_assoc, ← mul_add, inv_two_add_inv_two, -inv_pow,
     mul_eq_top]
-  ring_nf; rfl
+  ring; rfl
   simp [Level.floorZeroForm, enorm_integral_phase_eq_upperPairing, formModulus, descConv.eq_1,
     weylRatio, ← formIntegrandOne_eq Γ C, formIntegrandOne, ← sq, mul_pow]

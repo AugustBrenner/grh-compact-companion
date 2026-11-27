@@ -10,11 +10,11 @@ import Readable.Step3_AnalyticEndgame
 Top-level assembly of the proof of GRH and RH from Steps 1 and 3 together with the geometric and
 arithmetic inputs in `New`:
 
-1. **Theorem C (`theorem_C_integral_forms_long`)**: Pairs `Data.heightLe_volume_rows` and
+1. **Theorem C (`theorem_C_integral_forms_long`, Theorem 4.14)**: Pairs `Data.heightLe_volume_rows` and
    `Data.heightLe_volume_ratio_sq` through `twisted_lattice_volume_pinch`.
-2. **Main Inequality `(⋆)` (`star_inequality`, Theorem 4.9)**: Pits Theorems A–B against Theorem C
+2. **Main Inequality `(⋆)` (`star_inequality`, Theorem 4.15)**: Pits Theorems A–B against Theorem C
    so `D.mainHeight` cancels identically, leaving `m · rem ≤ (log b)² · budget`.
-3. **One-sided prime bound (`eventually_one_sided_prime_bound`)**: Slides `log x₁` into `[t, t²]`
+3. **One-sided prime bound (`eventually_one_sided_prime_bound`, Section 4.5)**: Slides `log x₁` into `[t, t²]`
    via `cauchy_moment_window`, yielding `primeError d N₀ x ≤ x^(-1/2 + 8ε)`.
 4. **GRH and RH (`grh_half_plane`, `grh_critical_line`, `rh_critical_line`)**: Induces `χ mod q`
    to `N₀ = 18480 q`, applies `one_sided_zero_free_criterion`, and reflects across `s ↔ 1 - s`.
@@ -42,7 +42,7 @@ theorem theorem_C_integral_forms_long {P : Parameters} {D : Data P} {n : ℕ} {y
     gcongr; exact D.le_of_hasLogBound
   linarith
 
-/-- **Main Inequality `(⋆)` (Theorem 4.9 of Paper C)**: `m · rem ≤ (log b)² · budget`. -/
+/-- **Main Inequality `(⋆)` (Theorem 4.15 of Paper C)**: `m · rem ≤ (log b)² · budget`. -/
 theorem star_inequality {P : Parameters} {D : Data P} :
     D.m * D.remainder ≤ D.logB ^ 2 * D.budget := by
   obtain ⟨n, y, hind, hbig, ⟨δ, hδ_le, hidx⟩, hshort⟩ := D.exists_family_covolumeSq_le
@@ -75,7 +75,7 @@ theorem star_inequality {P : Parameters} {D : Data P} :
           linarith [le_of_mul_le_mul_left hboth hd_pos]
     _ ≤ D.logB ^ 2 * D.budget := D.le_of_hasLogBound
 
-/-- **One-sided prime bound from `(⋆)` and the Cauchy-moment window (Section 3.5 of Paper C)**. -/
+/-- **One-sided prime bound from `(⋆)` and the Cauchy-moment window (Section 4.5 of Paper C)**. -/
 theorem eventually_one_sided_prime_bound (P : Parameters) {ε : ℝ}
     (hε : 0 < ε / 6 ∧ ε < 1 / 100) :
     ∀ᶠ x in atTop, primeError P.d P.N₀ x ≤ x ^ (8 * ε + (2 : ℝ)⁻¹ - 1) := by

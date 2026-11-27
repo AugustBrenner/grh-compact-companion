@@ -155,7 +155,7 @@ lemma normSqAt_comparisonForm_le ζ σ : smallHookNumber j * (comparisonForm j 1
   simp (disch := positivity) [log_mul, this, twist_one_spec, add_assoc]
   grw +useKAbstract [@log_le_self (_ + _), @log_le_self (_ * _), ← sq, Nat.sub_sub, Nat.sub_sub,
     reducedHalfGap, Nat.sub_le, Nat.sub_le]
-  simpa using D.le_of_hasLogBound; any_goals first | positivity | (simp [*, twist_one_spec]; done) | (simp [*]; lia)
+  simpa using D.le_of_hasLogBound; any_goals first | positivity | simp [*, twist_one_spec] <;> lia
   simp [DividedSplitting.productForm]
   grw (transparency := default) [weylNormSq_deltaForm_le isOfFinOrder_level_char, map_cartanProduct
     (f := σ.toRingHom), weylNormSq_cartanProduct, ((lineScale j).2.2 ..).2 rfl, single_le_sum (f :=

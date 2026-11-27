@@ -7,11 +7,11 @@ Proofs of the linear-algebraic and height-theoretic steps from **Sections 4 and 
 
 1. **Rational product formula (`rational_product_formula_log`)**: For nonzero `q ∈ ℚ` with
    `max(|num q|, den q) < M`, `log |q| + ∑_{p < M prime} log |q|_p = 0`.
-2. **Product formula for heights (`product_formula_for_heights`, Lemma 4.3)**: `HeightLe c 1 → 0 ≤ c`.
+2. **Product formula for heights (`product_formula_for_heights`, Lemma 4.4)**: `HeightLe c 1 → 0 ≤ c`.
 3. **Greedy covering from spreading (`greedy_covering_from_spread`, Lemma 7.1)**: An `η`-spread
    family `B : Θ → (V →ₗ[ℂ] W)` admits `t : Finset Θ` with `#t · dim V ≤ 5 dim W log(1 + η⁻¹)`
    covering at least `(1 - 4η) dim W` dimensions.
-4. **Twisted-lattice volume pinch (`twisted_lattice_volume_pinch`, Theorem 4.4(2))**: Combining
+4. **Twisted-lattice volume pinch (`twisted_lattice_volume_pinch`, Theorem 4.5(2))**: Combining
    upper and lower height bounds for `Z(θ)/Z(1)` and `Z(1)²/Z(θ)²` yields `0 ≤ c_up + c_low`.
 -/
 
@@ -46,7 +46,7 @@ theorem rational_product_formula_log {M : ℕ} {q : ℚ} (hq : q ≠ 0) (hM : q.
     ← Finset.sum_add_distrib]
   exact Finset.sum_eq_zero fun p _ ↦ by ring
 
-/-- **Lemma 4.3 of Paper C (`product_formula_for_heights`)**: `HeightLe c 1 → 0 ≤ c`.
+/-- **Lemma 4.4 of Paper C (`product_formula_for_heights`)**: `HeightLe c 1 → 0 ≤ c`.
 Bounded `2`-adic norms force the witness `H ≠ 0` to be algebraic over `ℚ`; applying
 `rational_product_formula_log` to `q = Nm_{ℚ(H)/ℚ}(H)` yields `0 ≤ c`. -/
 theorem product_formula_for_heights {c : ℝ} (h : HeightLe c 1) : 0 ≤ c := by
@@ -203,7 +203,7 @@ theorem greedy_covering_from_spread {Θ V W : Type} [AddCommGroup V] [Module ℂ
   have hstrict : F < F' := lt_of_le_of_ne le_sup_left fun heq ↦ by rw [heq] at hΔ_pos; linarith
   exact (not_lt_of_ge (ht_max hins_adm (hT_ins ▸ le_sup_left))) (hT_ins ▸ hstrict)
 
-/-- **Theorem 4.4(2) of Paper C (`twisted_lattice_volume_pinch`)**:
+/-- **Theorem 4.5(2) of Paper C (`twisted_lattice_volume_pinch`)**:
 Multiplying `(Z(θ)/Z(1))²` by `Z(1)²/Z(θ)²` gives `1` of height `2(c_up + c_low)`, forcing `0 ≤ c_up + c_low`. -/
 theorem twisted_lattice_volume_pinch {Z₁ : ℂ} {Zθ : PrimePadicIso → ℂ}
     {c_up c_low : ℝ} (hZ₁ : Z₁ ≠ 0) (hZθ : ∀ ι, Zθ ι ≠ 0)

@@ -28,9 +28,11 @@ log = Path('paper_c.log').read_text(encoding='latin-1')
 assert not re.search(r'(^!|undefined|Rerun to get|Label\(s\) may have changed|pdfTeX warning|Font Warning)', log, re.M | re.I), "LaTeX errors, warnings, or undefined refs"
 over_h = [float(x) for x in re.findall(r'Overfull \\hbox \(([0-9.]+)pt too wide\)', log)]
 over_v = [float(x) for x in re.findall(r'Overfull \\vbox \(([0-9.]+)pt too high\)', log)]
+under_h = [int(x) for x in re.findall(r'Underfull \\hbox \(badness (\d+)\)', log)]
 under_v = [int(x) for x in re.findall(r'Underfull \\vbox \(badness (\d+)\)', log)]
 assert not over_h, f"Overfull hboxes: {over_h}"
 assert not over_v, f"Overfull vboxes: {over_v}"
+assert not under_h, f"Underfull hboxes: {under_h}"
 assert not under_v, f"Underfull vboxes: {under_v}"
 pages = re.search(r'Output written on paper_c.pdf \((\d+) pages', log)
 assert pages
@@ -41,6 +43,7 @@ report = {
     'undefined_citations': 0,
     'overfull_hboxes_pt': over_h,
     'overfull_vboxes_pt': over_v,
+    'underfull_hboxes_badness': under_h,
     'underfull_vboxes_badness': under_v,
     'aux_converged': True,
     'passes': int(os.environ['PAPER_C_BUILD_PASSES']),

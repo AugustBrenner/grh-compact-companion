@@ -8,6 +8,7 @@ lean/.cache/
 # LaTeX build intermediates (keep paper_c.pdf tracked for GitHub + Zenodo archive)
 *.aux
 *.log
+!lean/verification_axioms.log
 *.out
 *.toc
 *.fls

@@ -150,7 +150,7 @@ lemma exists_isLaw {r} e (hr : 0 < r) (hf : 4 ≤ Fintype.card (InfinitePlace E)
       congr($(x.2).1 g)⟩, x.1.2.imp (.imp (.imp (·.subtype_mk _) (Subtype.ext <| · · ·)) fun b ↦
       (Subtype.ext <| b · <| ·.imp (by simp +contextual [s']))) (.imp (Subtype.ext <| · · · · ·)
       (Subtype.ext <| · · ·))⟩) (by simp [Injective, funext_iff])) _)
-    grw [S.prod_le_prod (g := fun v ↦ ite (↑ℓ ∉ v.1) 1 (.card W)) fun v _ ↦ ?_, hM,
+    grw [S.prod_le_prod' (g := fun v ↦ ite (↑ℓ ∉ v.1) 1 (.card W)) fun v _ ↦ ?_, hM,
       card_infinitePlace_eq_card_infinitePlace, ← hf, ← S.card_filter_add_card_filter_not (↑ℓ ∉
       ·.1), ← hI.trans (card_le_card_of_injOn _ ?_ i.injOn)] at B
     simpa [prod_ite, pow_add, pow_succ, ← mul_assoc, add_right_comm _ _ 4, NeZero.pos] using B

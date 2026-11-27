@@ -228,8 +228,8 @@ lemma sum_le_of_positive_type [WeilData E] {Θ : _ → ℝ} (h0 : ∀ s, 0 ≤ �
   (S.amplitudeSum .univ) Ω) (hA : ∀ s, Θ s ≠ 0 → ∀ w ∈ A, s ∈ S.vectorFixer (i := 0) w (D w)) :
   ∑ s, Θ s ≤ (1 + 9 / S.b ^ 4) * S.mainEnergy * (S.b ^ (6 * 𝔰.k))⁻¹ ^ #A := by
   induction' A using WellFoundedGT.induction with A ih generalizing V Θ D
-  obtain ⟨hq, q, _⟩ := S.levelPrime_le 0, S.le_levelPrime 0, S.thousand_le_b,
-    univ.sum_nonneg (fun s _ ↦ h0 s), S.ϱ_le_k; by_contra! hK
+  obtain ⟨hq, q, _⟩ := S.levelPrime_le 0, S.le_levelPrime 0, S.thousand_le_b, univ.sum_nonneg' h0,
+    S.ϱ_le_k; by_contra! hK
   apply hK.not_ge
     (le_of_mul_le_mul_left (.trans _ (energy_fixingSet_le A D)) (by bound [@one_lt_pow₀ ℝ]))
   grw [← hB, one_sub_mul, sub_le_comm, ← sum_sdiff_eq_sub (by simp), ← sum_filter_ne_zero]
@@ -250,7 +250,7 @@ lemma sum_le_of_positive_type [WeilData E] {Θ : _ → ℝ} (h0 : ∀ s, 0 ≤ �
         simpa [F, ← mul_inclMatrix, ← mulVec_mulVec, inv_smul_eq_iff] using! h.symm, by grind⟩
     tauto).trans ?_))]
   · simp [field]; grw [← le_self_pow₀, ← k_le_b, ← S.ϱ_le_k] <;> push_cast <;> nlinarith
-  · gcongr <;> simp [*, Finset.sum_nonneg, subset_iff, F, transpose_splitGram, mul_inclMatrix,
+  · gcongr <;> simp [*, sum_nonneg', subset_iff, F, transpose_splitGram, mul_inclMatrix,
       ← inclMatrix.eq_1, card_eq_nat_card, ↓card_resField_eq_levelPrime]; bound
   grw [mul_div_left_comm, div_le_one_of_le₀]; linarith
   grw [← sq_le_sq₀, mul_pow, sq_sqrt, card_eq_nat_card, card_resField_eq_levelPrime, hq, hq]
@@ -270,7 +270,7 @@ lemma sum_norm_amplitudeSum_le [StablyUnram E] i {x} (hx : IsCentralProj x) : �
   · simp [besselEnergy, ← card_subtype, field] at h
     grw [← sq_le_sq₀, sq_sum_le_card_mul_sum_sq, show ∑ _, _ = Y 1 by simp [Y, φ, norm_sq_eq,
       sum_prod_type, ← sum_div, div_pow, mul_div, @sum_comm S.Classes _ S.BesselCoord],
-      (le_div_iff₀ _).2 h] <;> simp [columnDim, field, Finset.sum_nonneg] <;> bound
+      (le_div_iff₀ _).2 h] <;> simp [columnDim, field, sum_nonneg'] <;> bound
   choose p σ₀ h₀ h₁ using (exists_besselS_mem_termsOver · (mem_filter.1 h).2)
   apply congr(∑ c, $(sum_bijective p (Finite.injective_iff_bijective.1 fun c d h ↦
     (eq_and_mem_classUnip_of_besselS (by aesop)
@@ -335,7 +335,7 @@ lemma Fits.exists_translate_finrank_comap_le [WeilData E] {g c} [Module.Finite �
     simp [mainEnergy]; field_simp [mass_pos, besselDegree_pos, ne_of_gt]; any_goals positivity
     repeat norm_num [energy, sum_filter, norm_sq_eq, sum_prod_type, sum_div, hu, div_pow,
       @sum_comm S.Classes _ S.BesselCoord, @sum_comm S.GRes]
-  have k := univ.sum_nonneg fun y _ ↦ pr (.piTensorElem o) (P (.single y 1)) ▸ inner_self_nonneg
+  have k := univ.sum_nonneg' fun y ↦ pr (.piTensorElem o) (P (.single y 1)) ▸ inner_self_nonneg
   simp [add_div, show piTensorElem (1 - g ·) = ∑ i,
     piTensorElem (Pi.mulSingle i (1 - g i)) - (1 - piTensorElem g) by
     ext; simp [← map_one piTensorElem, -map_one]; ring, ↓@norm_sq_eq_re_inner ℂ, ↓hρ, columnDim,

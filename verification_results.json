@@ -102,9 +102,9 @@
     },
     "exact_rem_id_matches_identically": true,
     "k_even_for_odd_r_even_m": true,
-    "main_pair_doubled_count_equals_k": true,
+    "main_pair_range_fits_in_m_to_r": true,
     "grh_eps_margin_sample_verified": true,
-    "star_sufficient_scale_spot_checks_note": "Spot checks of weaker sufficient bounds (x^{10^12}<=b, (log b)^{100}<=x, a>=xb, f>=1, log b>=25); omits log(log b)>=10^{12} C_P. Analytic proof is in paper_c.tex Theorem 4.9 / Step4_MainProof.lean.",
+    "star_sufficient_scale_spot_checks_note": "Spot checks of weaker sufficient bounds (x^{10^12}<=b, (log b)^{100}<=x, a>=xb, f>=1, log b>=25); omits log(log b)>=10^{12} C_P. Analytic proof is in paper_c.tex (Main Inequality (*)) / Step4_MainProof.lean.",
     "star_sufficient_scale_spot_checks": {
       "log_b=1e+16": {
         "log10_4x99_over_B_upper": -4342944818606957.0,

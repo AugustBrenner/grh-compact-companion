@@ -101,8 +101,7 @@ lemma Data.hasRoute_succ {j} (h : j < D.m) : D.HasRoute (j := j + 1) h.le h (4 *
     (u _) (D.gridDiagEquiv_spec h), ← gridSpace_diag h, ← s]; congr! -closePost 1
   any_goals exact (by simp +contextual [gridPathMap_congr · ·])
   all_goals clear * - o e u; simp [gridChar, card_gridIndex, mul_assoc, ← pow_succ, *, e,
-    funext_iff, ← ext_iff, reindex_equiv ι.symm, reindex_equiv (u _), Prod.map_comp_map]
-  all_goals grind
+    funext_iff, ← ext_iff, reindex_equiv ι.symm, reindex_equiv (u _), Prod.map_comp_map] <;> grind
 
 /-- For j ≤ m there is a `Data.HasRoute` of cost 2j² from path 0 to path j: tidy data of order
 n give tidy data of order n + 2j², and if the new periods are multiples of T, the old are

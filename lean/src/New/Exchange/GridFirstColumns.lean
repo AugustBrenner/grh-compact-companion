@@ -88,7 +88,7 @@ lemma formRep_legDescents_tupleAction {z b} S F k (e : g (z, 0, b) = (gridModulu
     (pairWeil_modDatum_single k u) _).trans (congr(_ • descentMove _
       $(i u U (ite_eq_left ·))).trans ?_)
   simp [gridChar_det, smul_smul, edgeCharProd, legEdges, prod_eq_prod_Ico_succ_bot,
-    edgeChar, *]; ring_nf
+    edgeChar, *]; ring
   by_cases ‹ℕ› = D.m <;> simp_all [legEdges, edgeCharProd, not_lt.2]
 
 /-- Let g be 1 at both nodes (0, m), and its value at (0, 0) in Z be that in V extended by 1.

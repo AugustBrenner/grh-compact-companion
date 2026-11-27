@@ -45,7 +45,7 @@ lemma exists_isFitFamily {P} (D : Data P) : ∃ θ, D.IsFitFamily θ := by
       sum_add_distrib, ← mul_sum]
     grw [L, sum_le_sum fun _ _ ↦ by grw [mul_comm, log_le_self (by simp)], sum_le_hasSum _ (by simp)
       (hasSum_coe_mul_geometric_of_norm_lt_one (by bound)), L, (exists_length_shaOdd_le
-      ..).choose_spec.2.1, classNumber_le, L, L, prod_le_prod (by simp; tauto), prod_const,
+      ..).choose_spec.2.1, classNumber_le, L, L, prod_le_prod' (by simp; tauto), prod_const,
       Nat.card_Ioc, tsub_tsub_le_tsub_add, add_tsub_cancel_left]
     push_cast [↓log_of_nat_eq_posLog, sub_half, Nat.cast_natAbs, abs_discr_eq_rootDiscr_pow,
       finrank_eq_two_mul_card_infinitePlace]

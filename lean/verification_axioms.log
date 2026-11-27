@@ -1,0 +1,24 @@
+'riemannHypothesis' depends on axioms: [propext, Classical.choice, Quot.sound]
+'riemannZeta_eq_zero_re' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LFunction_ne_zero_of_half_lt_re' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LFunction_eq_zero_re' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LFunction_eq_zero_re_of_isPrimitive' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Readable.StepanovWarmup.stepanov_S_plus_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Readable.StepanovWarmup.stepanov_warmup' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Readable.ProductFormulaAndPinch.rational_product_formula_log' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Readable.ProductFormulaAndPinch.product_formula_for_heights' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Readable.ProductFormulaAndPinch.greedy_covering_from_spread' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Readable.ProductFormulaAndPinch.twisted_lattice_volume_pinch' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Readable.BehrendSphere.behrend_three_term_free' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Readable.AnalyticEndgame.cauchy_moment_window' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Readable.AnalyticEndgame.one_sided_zero_free_criterion' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Readable.MainProof.theorem_C_integral_forms_long' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Readable.MainProof.star_inequality' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Readable.MainProof.eventually_one_sided_prime_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Readable.MainProof.grh_half_plane' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Readable.MainProof.grh_critical_line' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Readable.MainProof.rh_critical_line' depends on axioms: [propext, Classical.choice, Quot.sound]

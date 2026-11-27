@@ -48,7 +48,7 @@ lemma card_mul_sum_det_le [Fintype k] (π : G →* GL n k) (A : _ → Matrix n m
                 grw [@N fun x ↦ toLp 2 fun ζ ↦ ψ (-x ⬝ᵥ ζ) / r, N orthonormal_single, ← add_div,
     ← two_mul_le_add_sq, mul_assoc, ← @re_inner_le_norm ℂ, inner_sum_sum_eq_card_mul (W y v · / r)]
   all_goals simp [*, smul_vecMul, mul_nonneg, expect_add_distrib, NNRat.smul_def, W, r, add_nonneg,
-    Finset.sum_nonneg, inner, field, vecMul_mulVec, ← Matrix.mul_assoc, orthonormal_iff_ite, two_mul,
+    sum_nonneg', inner, field, vecMul_mulVec, ← Matrix.mul_assoc, orthonormal_iff_ite, two_mul,
     invTransposeGL, dotProduct_mulVec, div_mul_div_comm, ← map_neg_eq_conj, ← map_add_eq_mul,
     ← ofReal_mul, transposeGL,
     add_assoc, ← sum_div, neg_add_eq_sub, ← sub_dotProduct, sum_addChar_dotProduct, Units.smul_def]

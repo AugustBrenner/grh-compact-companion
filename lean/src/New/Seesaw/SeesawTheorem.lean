@@ -118,7 +118,7 @@ lemma exists_isAdmissibleComb_unfolding k l {X s} [Fintype X] (Y : Grading (D.sp
       (by simp)).1⟩⟧) (fun _ _ d ↦ by simpa using QuotientGroup.eq.2 (D.chosenLevel_inf_trivialOn_le
       ϑ ⟨D.principalLevel_le_chosenLevel dvd_rfl (QuotientGroup.eq.1 d :), by
       simp [e]⟩)) (absurd · (have := Fact.mk D.piGBar_ne_zero; relIndex_ne_zero_of_isLevel _))),
-      absNorm_piGBar, ← pow_mul, card_Y_le] <;> simp [m_eq_two_mul_varrho_add_two,
+      absNorm_piGBar, ← pow_mul, card_Y_le] <;> simp [m_eq_two_mul_varrho_add_two, NeZero.one_le,
       Nat.cast_inv_le_one, NeZero.pos]; omega
   simp [e]
   refine sum_equiv (toPerm _) (c₁ ϑ ⟨_, Y.snd_mem_besselFin (Y.inclX_mem_besselGroup _)⟩ (hA' (b

@@ -223,7 +223,7 @@ lemma Data.weylNormSq_Bmu_le (H : IsGoodDatum 1 Ψ) {σ : ℂ ≃+* ℂ} {φ B} 
     repeat use D.le_of_hasLogBound]
   simp [heightPerRow, dirCost, jetSize, (D.le_of_hasLogBound : D.nominalWeight _ ≤ D.a), gain,
     forcedPart, κ, apply_ite, ← mul_sum, sum_mul, add_mul, mul_assoc, (filter ..).sum_comm,
-    D.primeSum_eq_sum_localAsk .refl, -tsub_le_iff_right]; ring_nf; use D.le_of_hasLogBound)
+    D.primeSum_eq_sum_localAsk .refl, -tsub_le_iff_right]; ring; use D.le_of_hasLogBound)
 
 seal Space.weightRep Space.embFin
 
@@ -237,7 +237,7 @@ lemma Data.IsMarked.hasType_prod_markOperator_pow : HasType ↑p integralColumns
   simp [← sum_mul, ← mul_assoc, ← mul_sum, ← Nat.cast_sum, sum_attach, -List.map_subtype] at h
   refine ⟨h.1, h.2.imp fun _ ↦ .imp_left (le_trans' ?_)⟩; erw [← mul_sum]
   grw [hΛ.card_le, sum_card_fiberwise_eq_card_filter, ← le_loss, jetCeil, Nat.ceil_lt_add_one]
-  gcongr ?_ * _; field_simp; use D.le_of_hasLogBound; bound
+  gcongr ?_ * _; field; use D.le_of_hasLogBound; bound
 
 include H hQ hv
 
