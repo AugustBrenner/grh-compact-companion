@@ -5,7 +5,7 @@ if [ -d /Library/TeX/texbin ]; then
     PATH="/Library/TeX/texbin:$PATH"
     export PATH
 fi
-rm -f build_report.json
+rm -f paper_c.aux paper_c.out paper_c.toc build_report.json
 python3 -I verify_paper_c.py > verification_stdout.json
 pass=0
 previous=''

@@ -69,7 +69,7 @@ lake build
 lake env lean scripts/PrintAxioms.lean
 for f in src/Readable/Step*.lean; do lake env lean "$f"; done
 ```
-Every theorem in `src/Main.lean` (5 root theorems) and `src/Readable/` (15 walkthrough theorems) depends only on `[propext, Classical.choice, Quot.sound]`. All 799 source files under `lean/src/` contain zero `sorry`, `admit`, custom `axiom`, `unsafe`, `native_decide`, or `implemented_by` tokens (the separate, unimported upstream file [`lean/Challenge.lean`](./lean/Challenge.lean) contains five intentional `sorry` stubs used by `Comparator` verification, matching the disclosure in §9.2 of `paper_c.pdf`).
+Every theorem in `src/Main.lean` (5 root theorems) and `src/Readable/` (15 walkthrough theorems) depends only on `[propext, Classical.choice, Quot.sound]`. All 799 source files under `lean/src/` contain zero executable `sorry`, `admit`, custom `axiom`, `unsafe`, `native_decide`, or `implemented_by` tokens (outside comments and docstrings; the English word "admit" appears in three doc comments). The separate, unimported upstream file [`lean/Challenge.lean`](./lean/Challenge.lean) contains five intentional `sorry` stubs used by `Comparator` verification, matching the disclosure in §9.2 of `paper_c.pdf`.
 
 To audit soundness without reading 114k lines of proof tactics, inspect the **29-line trust surface**: [`lean/src/Statements.lean`](./lean/src/Statements.lean) and [`lean/src/Main.lean`](./lean/src/Main.lean), verify byte-for-byte parity with `lsernau/grh-lean@72fead1`, and run the build and `PrintAxioms.lean`.
 

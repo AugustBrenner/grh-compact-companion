@@ -600,7 +600,7 @@ def check_exact_remainder_identity_and_scales():
     #   log b >= 25.
     # NOTE: These finite spot checks omit the astronomical datum threshold
     # log(log b) >= 10^{12} * C_P; the full-tower analytic proof holds identically
-    # for all admissible data (paper_c.tex Theorem 4.9 / Step4_MainProof.lean:73-76).
+    # for all admissible data (paper_c.tex Theorem 4.15 / Step4_MainProof.lean:73-76).
     import math as _m
     LN10 = _m.log(10.0)
     sufficient_scale_spot_checks = {}
