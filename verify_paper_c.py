@@ -593,19 +593,18 @@ def check_exact_remainder_identity_and_scales():
         beta = F(1, 2) + 8 * eps
         assert F(1, 2) < beta < re_rho
 
-    # Verify the (*) absorption inequality
+    # Spot-check the (*) absorption inequality
     #   4*L_cov + 4*x^99 + 10*log(1 + b^2)*B <= f*a*(log b)^5
-    # under Table 2's full admissible tower:
+    # under weaker sufficient scale inequalities drawn from Table 2:
     #   x^{10^6} <= x_1, x_1^{10^6} <= b  =>  x^{10^{12}} <= b,
-    #   (log b)^{100} <= x,  a >= x*b,  f >= 1,  B = f*a*(log b)^3,  L_cov = f*a*(log b)^4.
-    # Dividing by B = f*a*(log b)^3 gives:
-    #   4*log b + 4*x^99/(f*a*(log b)^3) + 10*log(1 + b^2) <= (log b)^2.
-    # Under x^{10^{12}} <= b and a >= x*b, 4*x^99/(f*a*(log b)^3) <= 4*x^98/(b*(log b)^3)
-    # <= 4*b^(98e-12 - 1)/(log b)^3 << 1.
-    # Test concrete admissible-tower corners in log10 space (exact float comparison):
+    #   (log b)^{100} <= x,  a >= x*b,  f >= 1,  B = f*a*(log b)^3,  L_cov = f*a*(log b)^4,
+    #   log b >= 25.
+    # NOTE: These finite spot checks omit the astronomical datum threshold
+    # log(log b) >= 10^{12} * C_P; the full-tower analytic proof holds identically
+    # for all admissible data (paper_c.tex Theorem 4.9 / Step4_MainProof.lean:73-76).
     import math as _m
     LN10 = _m.log(10.0)
-    tower_margins = {}
+    sufficient_scale_spot_checks = {}
     for log_b in (1e16, 1e18, 1e24):
         # Upper-bound x from x <= b^{10^{-12}} (consistent with (log b)^{100} <= x for log_b >= 4e15)
         log_x = 1e-12 * log_b
@@ -616,15 +615,17 @@ def check_exact_remainder_identity_and_scales():
         # Remaining terms divided by B: 4*log_b + 10*log(1 + b^2) < 24*log_b + 1 < (log_b)^2 - 1
         rem_ratio = (4.0 * log_b + 20.0 * log_b + 1.0) / (log_b * log_b)
         assert rem_ratio < 1e-12
-        tower_margins[f"log_b={log_b:.0e}"] = {
+        sufficient_scale_spot_checks[f"log_b={log_b:.0e}"] = {
             "log10_4x99_over_B_upper": round(log10_x99_over_B, 2),
             "non_x99_over_rhs_upper": rem_ratio,
         }
 
     # Regression check: the reduced quadratic g(u) = u^2 - 4u - 10*log(1 + e^{2u})
-    # ONLY governs the non-x^99 terms (root near 24.000); at the inadmissible corner
-    # (log b = 25, x = 25^{100}), 4*x^99 massively exceeds f*a*(log b)^5, proving
-    # that the full tower x^{10^{12}} <= b (not just (log b)^{100} <= x) is essential.
+    # ONLY governs the non-x^99 terms (root near 24.000). To prove rigorously that
+    # dropping 4*x^99 fails at the inadmissible corner (log b = 25, x = 25^{100})
+    # (which satisfies log b > 24.01 and (log b)^{100} <= x, but violates x^{10^{12}} <= b),
+    # we evaluate ACTUAL datum-formula parameters (q_0 = 18480, phi(q_0) = 3840) and
+    # compare 4*x^99 against an EXACT UPPER BOUND on f*a*(log b)^5:
     lo, hi = 23.0, 26.0
     for _ in range(80):
         mid = 0.5 * (lo + hi)
@@ -635,12 +636,34 @@ def check_exact_remainder_identity_and_scales():
             hi = mid
     reduced_quad_root = hi
     assert 24.0 < reduced_quad_root < 24.01
-    # Corner regression at log_b = 25, x = 25^{100}:
-    log10_x_corner = 100.0 * _m.log10(25.0)
-    log10_4x99_corner = _m.log10(4.0) + 99.0 * log10_x_corner
-    # Lower bound on f*a*(log b)^5 using f >= x^11, a >= x*b:
-    log10_rhs_lb_corner = 12.0 * log10_x_corner + 25.0 / LN10 + 5.0 * _m.log10(25.0)
-    assert log10_4x99_corner - log10_rhs_lb_corner > 12000.0
+
+    # Concrete datum-formula upper bound at q_0 = 18480, log_b = 25, x = 25^{100}:
+    q0_corner = 18480
+    phi_q0_corner = sum(1 for u in range(1, q0_corner) if gcd(u, q0_corner) == 1)
+    assert phi_q0_corner == 3840
+    x_corner = 25 ** 100
+    # Pick exact 2-power m in [sqrt(x), 2*sqrt(x)]: 2^{e+1} with 2^{e+1} >= sqrt(x) = 5^{100}
+    sqrt_x_corner = 5 ** 100
+    e_plus_1 = sqrt_x_corner.bit_length()  # exact bit length gives 2^{e+1} in (sqrt_x, 2*sqrt_x]
+    m_corner = 1 << e_plus_1
+    assert sqrt_x_corner <= m_corner <= 2 * sqrt_x_corner
+    s_corner = 22 * e_plus_1
+    # l_0(s) = 3^(floor(log_3 s) + 4)
+    k3 = 0
+    while 3 ** (k3 + 1) <= s_corner:
+        k3 += 1
+    l0_corner = 3 ** (k3 + 4)
+    T_corner = 3 * l0_corner * (1 << s_corner)
+    q1_corner = q0_corner * T_corner
+    f_corner = phi_q0_corner * T_corner
+    b_corner_upper = ceil(_m.exp(25.0))
+    # a = q_1 * ceil(x*b / q_1) <= q_1 * ((x * b_upper + q_1 - 1) // q_1)
+    a_corner_upper = q1_corner * ((x_corner * b_corner_upper + q1_corner - 1) // q1_corner)
+    lhs_corner = 4 * (x_corner ** 99)
+    rhs_corner_upper = f_corner * a_corner_upper * (25 ** 5)
+    assert lhs_corner > rhs_corner_upper
+    log10_excess_corner = _m.log10(lhs_corner) - _m.log10(rhs_corner_upper)
+    assert log10_excess_corner > 10700.0
 
     REPORT["scales_and_cancellations"] = {
         "exact_rem_id_finite_instance": {"q0": q0, "T": T, "q1": q1, "symbolic_components": dim},
@@ -648,10 +671,13 @@ def check_exact_remainder_identity_and_scales():
         "k_even_for_odd_r_even_m": True,
         "main_pair_doubled_count_equals_k": True,
         "grh_eps_margin_sample_verified": True,
-        "star_full_tower_absorption_verified": True,
-        "star_tower_margins": tower_margins,
+        "star_sufficient_scale_spot_checks_note": (
+            "Spot checks of weaker sufficient bounds (x^{10^12}<=b, (log b)^{100}<=x, a>=xb, f>=1, log b>=25); "
+            "omits log(log b)>=10^{12} C_P. Analytic proof is in paper_c.tex Theorem 4.9 / Step4_MainProof.lean."
+        ),
+        "star_sufficient_scale_spot_checks": sufficient_scale_spot_checks,
         "reduced_non_x99_quadratic_root": round(reduced_quad_root, 6),
-        "dropped_x99_corner_regression_log10_excess": round(log10_4x99_corner - log10_rhs_lb_corner, 1),
+        "dropped_x99_actual_corner_log10_excess_over_rhs_upper": round(log10_excess_corner, 1),
     }
 
 
@@ -667,7 +693,7 @@ def main():
     REPORT["scope"] = (
         "Constructive Stepanov polynomial verification over F_101 plus exact rational "
         "checks of elementary lemmas, finite sanity checks of eq:rem_id and epsilon margins, "
-        "and full-tower scale verification of the (*) absorption step."
+        "and spot checks of weaker sufficient scale bounds for the (*) absorption step."
     )
     (HERE / "verification_results.json").write_text(json.dumps(REPORT, indent=2) + "\n")
     print(json.dumps(REPORT, indent=2))

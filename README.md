@@ -17,12 +17,12 @@
 
 The proof of the Generalized Riemann Hypothesis (GRH) for Dirichlet $L$-functions—and hence the classical Riemann Hypothesis (RH)—is due to **Levent Alpöge (with Claude)** ([`alpo.ge/remark.pdf`](https://alpo.ge/remark.pdf)).
 
-Inside [`lean/`](./lean/), the directories `src/Lib/`, `src/New/`, `src/Main.lean`, and `src/Statements.lean` package the upstream [`lsernau/grh-lean`](https://github.com/lsernau/grh-lean) `grh-compact` snapshot (commit `72fead1`, Copyright 2026 Anthropic, PBC, Apache 2.0).
+Inside [`lean/`](./lean/), the directories `src/Lib/`, `src/New/`, `src/Main.lean`, and `src/Statements.lean` package the upstream [`lsernau/grh-lean`](https://github.com/lsernau/grh-lean) `grh-compact` snapshot (commit `72fead1`, Copyright 2026 Anthropic, PBC, Apache 2.0), with 13 minimal Lean `v4.35.0` tactic-compatibility patches in `src/New/` documented in [`lean/UPSTREAM_PATCHES.md`](./lean/UPSTREAM_PATCHES.md) (zero edits to `src/Statements.lean`, `src/Main.lean`, `src/Lib/`, or any theorem statement).
 
 This repository adds:
 1. **`paper_c.pdf` / `paper_c.tex`**: A self-contained expository companion translating the global architecture of `grh-compact` from Stepanov's 1969 polynomial method over $\mathbb{F}_p$ to $\mathbb{Z}$, highlighting the four structural simplifications of `grh-compact` (Cauchy-moment window, rank-2 Siegel-discriminant sieve, generating-function Hecke inversion, and Higman's operator in Ribet's method).
-2. **`lean/src/Readable/`**: A 5-file modular Lean 4 walkthrough spine (`Step0`–`Step4`) compiled alongside `grh-compact` that mirrors the paper section-by-section, with all 5 root theorems and 15 walkthrough theorems checked via [`lean/scripts/PrintAxioms.lean`](./lean/scripts/PrintAxioms.lean) to depend only on Lean's three standard axioms (`propext`, `Classical.choice`, `Quot.sound`).
-3. **`verify_paper_c.py` & `build.sh`**: Exact rational/finite numerical checks for the elementary identities, toy Stepanov construction over $\mathbb{F}_{101}$, Behrend sphere triples, scale-tower absorption, and zero-warning LaTeX build verification.
+2. **`lean/src/Readable/`**: A 5-file modular Lean 4 walkthrough spine (`Step0`–`Step4`, 15 designated `theorem` declarations + 18 public helper lemmas) compiled alongside `grh-compact` that mirrors the paper section-by-section, with all 5 root theorems and 15 walkthrough theorems checked via [`lean/scripts/PrintAxioms.lean`](./lean/scripts/PrintAxioms.lean) (recorded in [`lean/verification_axioms.log`](./lean/verification_axioms.log)) to depend only on Lean's three standard axioms (`propext`, `Classical.choice`, `Quot.sound`).
+3. **`verify_paper_c.py` & `build.sh`**: Exact rational/finite numerical checks for the elementary identities, toy Stepanov construction over $\mathbb{F}_{101}$, Behrend sphere triples, sufficient-scale spot checks and regression tests, and zero-warning LaTeX build verification (`build.sh` runs Python and LaTeX only; Lean verification is run separately below).
 
 ### What Is Proved in Full vs. Summarized
 
