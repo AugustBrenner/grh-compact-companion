@@ -1,0 +1,23 @@
+The Riemann Hypothesis via Multiplicity Chains: An Exposition and Lean 4 Companion to the Alpöge–Claude Proof
+Copyright 2026 August Brenner
+
+This companion repository (paper_c.tex, paper_c.pdf, verify_paper_c.py, build.sh,
+and lean/src/Readable/) is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+--- Upstream Attribution ---
+
+The packaged formalization under lean/ (excluding lean/src/Readable/, lean/README_READABLE.md,
+and the extended Lean theorem list in lean/scripts/PrintAxioms.lean) is derived from:
+
+GRH: a Lean 4 proof of the Generalized Riemann Hypothesis for Dirichlet L-functions (compact edition)
+Copyright 2026 Anthropic, PBC
+Source: https://github.com/lsernau/grh-lean (grh-compact, commit 72fead1)
+Licensed under the Apache License, Version 2.0 (see lean/LICENSE, lean/NOTICE, and lean/ATTRIBUTION.md).
+
+The underlying GRH/RH proof is due to Levent Alpöge (with Claude). lean/src/Statements.lean
+and the names and types of the five theorems in lean/src/Main.lean are taken from that proof
+unchanged; lean/lakefile.toml is adapted from it.
+
+Mathlib (https://github.com/leanprover-community/mathlib4) and Lean 4
+(https://github.com/leanprover/lean4) are external dependencies licensed under the Apache License,
+Version 2.0; see lean/NOTICE and lean/ATTRIBUTION.md for full dependency notices.

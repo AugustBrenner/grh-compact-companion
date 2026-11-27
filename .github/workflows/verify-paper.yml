@@ -1,0 +1,71 @@
+name: Verify Paper & Scripts
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  verify-python-and-latex:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run executable mathematical sanity checks
+        run: python3 -I verify_paper_c.py
+
+      - name: Validate Zenodo metadata JSON
+        run: python3 -m json.tool .zenodo.json > /dev/null
+
+      - name: Check Lean walkthrough files for sorry/admit/custom axioms
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          targets = sorted(Path("lean/src/Readable").glob("Step*.lean")) + [
+              Path("lean/src/Main.lean"),
+              Path("lean/src/Statements.lean"),
+          ]
+          assert len(targets) == 7, f"Unexpected Lean target count: {targets}"
+          bad = []
+          for p in targets:
+              text = p.read_text(encoding="utf-8")
+              # Strip line and block comments before checking tokens
+              cleaned = re.sub(r"/-.*?-/", "", text, flags=re.S)
+              cleaned = re.sub(r"--.*", "", cleaned)
+              if re.search(r"\b(sorry|admit|axiom)\b", cleaned):
+                  bad.append(str(p))
+          assert not bad, f"Disallowed tokens found in: {bad}"
+          print(f"Verified {len(targets)} Lean spine/root files: zero sorry/admit/axiom tokens.")
+          PY
+
+      - name: Install TeX Live & poppler-utils
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends \
+            texlive-latex-base \
+            texlive-latex-recommended \
+            texlive-latex-extra \
+            texlive-fonts-recommended \
+            texlive-pictures \
+            lmodern \
+            poppler-utils
+
+      - name: Build paper_c.pdf with strict zero-warning/zero-box check
+        run: ./build.sh
+
+      - name: Upload built PDF and verification reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: paper-c-verification
+          path: |
+            paper_c.pdf
+            build_report.json
+            verification_results.json

@@ -1,0 +1,127 @@
+{
+  "toy_stepanov_F101": {
+    "prime_p": 101,
+    "curve": "y^2 = x^3 + x + 1",
+    "m": 5,
+    "J": 41,
+    "K": 3,
+    "unknowns": 246,
+    "equations": 235,
+    "S0_count": 0,
+    "S_plus_count": 52,
+    "S_minus_count": 49,
+    "N_projective": 105,
+    "actual_deg_P": 364,
+    "max_deg_P": 392,
+    "stepanov_S_plus_bound": 78.7,
+    "all_S_plus_roots_order_m_verified": true,
+    "three_root_cubic_checked": {
+      "S0": 3,
+      "S_plus": 50,
+      "S_minus": 48
+    },
+    "admissible_optimal_m_ratios": [
+      {
+        "p": 101,
+        "m_max_odd": 5,
+        "bound_over_sqrt_p": 5.9105
+      },
+      {
+        "p": 10007,
+        "m_max_odd": 57,
+        "bound_over_sqrt_p": 5.2594
+      },
+      {
+        "p": 100003,
+        "m_max_odd": 181,
+        "bound_over_sqrt_p": 5.224
+      }
+    ],
+    "asymptotic_constant_3sqrt3": 5.196152
+  },
+  "product_formula_and_legendre": {
+    "worked_rational": "12/35",
+    "product_equals_one": true,
+    "v_13_of_1000_fact": 81,
+    "legendre_exact_pairs_checked": 24
+  },
+  "modulus_and_splitting": {
+    "base_modulus": 18480,
+    "first_admissible_prime_for_q1": 9239,
+    "smallest_nonsplit_prime_for_d_9239": 19,
+    "min_nonsplit_prime_observed_across_samples": 13,
+    "guaranteed_lower_bound_min_nonsplit_prime": 13,
+    "stably_unramified_root_order": 5040,
+    "base_times_3_div_5040": 11,
+    "sample_q_tested": 6
+  },
+  "cauchy_window_lemma": {
+    "R_values_checked": [
+      {
+        "R": 3.01,
+        "t_min": 29749.47
+      },
+      {
+        "R": 3.1,
+        "t_min": 3019.23
+      },
+      {
+        "R": 3.5,
+        "t_min": 642.23
+      },
+      {
+        "R": 3.9,
+        "t_min": 377.34
+      }
+    ],
+    "all_three_terms_strictly_below_one_third": true
+  },
+  "behrend_sphere": {
+    "L": 3,
+    "H": 5,
+    "n": 3,
+    "modulus": 3375,
+    "sphere_radius_sq": 17,
+    "set_size": 9,
+    "pigeonhole_lower_bound": 1.667,
+    "total_weighted_triples_checked": 2187,
+    "nontrivial_triples_verified_free": 2160
+  },
+  "cm_formal_group_prime_sum": {
+    "primes_checked_exact_series": 9,
+    "radius_identity_verified": true,
+    "exact_rational_prime_coefficients_matched": 10,
+    "exact_rational_diff": "0"
+  },
+  "scales_and_cancellations": {
+    "exact_rem_id_finite_instance": {
+      "q0": 8,
+      "T": 4,
+      "q1": 32,
+      "symbolic_components": 56
+    },
+    "exact_rem_id_matches_identically": true,
+    "k_even_for_odd_r_even_m": true,
+    "main_pair_doubled_count_equals_k": true,
+    "grh_eps_margin_sample_verified": true,
+    "star_full_tower_absorption_verified": true,
+    "star_tower_margins": {
+      "log_b=1e+16": {
+        "log10_4x99_over_B_upper": -4342944818606957.0,
+        "non_x99_over_rhs_upper": 2.4e-15
+      },
+      "log_b=1e+18": {
+        "log10_4x99_over_B_upper": -4.34294481860691e+17,
+        "non_x99_over_rhs_upper": 2.4e-17
+      },
+      "log_b=1e+24": {
+        "log10_4x99_over_B_upper": -4.342944818606909e+23,
+        "non_x99_over_rhs_upper": 2.3999999999999994e-23
+      }
+    },
+    "reduced_non_x99_quadratic_root": 24.0,
+    "dropped_x99_corner_regression_log10_excess": 12144.8
+  },
+  "status": "PASS",
+  "scope": "Constructive Stepanov polynomial verification over F_101 plus exact rational checks of elementary lemmas, finite sanity checks of eq:rem_id and epsilon margins, and full-tower scale verification of the (*) absorption step."
+}

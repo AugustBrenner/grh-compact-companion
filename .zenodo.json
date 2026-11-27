@@ -1,0 +1,40 @@
+{
+  "upload_type": "publication",
+  "publication_type": "preprint",
+  "title": "The Riemann Hypothesis via Multiplicity Chains: An Exposition and Lean 4 Companion to the Alpöge–Claude Proof",
+  "description": "An expository companion and modular five-file Lean 4 walkthrough spine (src/Readable/, 15 audited theorems) aligned directly with the compact Lean 4 formalization of Levent Alpöge and Claude's proof of the Generalized Riemann Hypothesis for Dirichlet L-functions (grh-compact, lsernau/grh-lean commit 72fead1, Apache 2.0). Includes complete prose proofs of the Stepanov finite-field prototype, Landau/Cauchy-moment analytic endgame, product-formula volume pinch, Behrend sphere, and CM prime-sum reduction, architectural summaries of Theorems A–C anchored to compiled Lean declarations, executable Python verification checks, and a Lean v4.35.0 standard-axiom audit.",
+  "access_right": "open",
+  "license": "Apache-2.0",
+  "creators": [
+    {
+      "name": "Brenner, August",
+      "affiliation": "Independent Researcher"
+    }
+  ],
+  "keywords": [
+    "Riemann hypothesis",
+    "Generalized Riemann hypothesis",
+    "Stepanov method",
+    "unitary theta lifts",
+    "CM formal groups",
+    "Behrend sphere",
+    "Landau lemma",
+    "Lean 4",
+    "formal verification",
+    "number theory"
+  ],
+  "related_identifiers": [
+    {
+      "scheme": "url",
+      "identifier": "https://alpo.ge/remark.pdf",
+      "relation": "isSupplementTo",
+      "resource_type": "publication-preprint"
+    },
+    {
+      "scheme": "url",
+      "identifier": "https://github.com/lsernau/grh-lean/tree/72fead1",
+      "relation": "isDerivedFrom",
+      "resource_type": "software"
+    }
+  ]
+}

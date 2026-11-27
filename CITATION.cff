@@ -1,0 +1,35 @@
+cff-version: 1.2.0
+message: "If you reference this expository companion or modular Lean 4 walkthrough spine, please cite it using the metadata below (and cite Levent Alpöge & Claude for the GRH/RH proof itself)."
+type: software
+title: "The Riemann Hypothesis via Multiplicity Chains: An Exposition and Lean 4 Companion to the Alpöge–Claude Proof"
+authors:
+  - family-names: "Brenner"
+    given-names: "August"
+    affiliation: "Independent Researcher"
+repository-code: "https://github.com/AugustBrenner/grh-compact-companion"
+license: "Apache-2.0"
+keywords:
+  - "Riemann hypothesis"
+  - "Generalized Riemann hypothesis"
+  - "Stepanov method"
+  - "unitary theta lifts"
+  - "Behrend sphere"
+  - "Landau lemma"
+  - "Lean 4"
+  - "formal verification"
+references:
+  - type: article
+    title: "Untitled four-page note announcing a Lean 4 proof of the Generalized Riemann Hypothesis"
+    authors:
+      - family-names: "Alpöge"
+        given-names: "Levent"
+    year: 2026
+    url: "https://alpo.ge/remark.pdf"
+  - type: software
+    title: "grh-lean (grh-compact edition, commit 72fead1)"
+    authors:
+      - name: "Anthropic, PBC"
+    year: 2026
+    repository-code: "https://github.com/lsernau/grh-lean"
+    commit: "72fead1"
+    license: "Apache-2.0"

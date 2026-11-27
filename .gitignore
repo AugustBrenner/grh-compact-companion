@@ -1,0 +1,23 @@
+# Lean build caches & toolchains (never commit ~20 GB local artifacts)
+lean/.lake/
+lean/.elan/
+lean/.cache/
+*.olean
+*.ilean
+
+# LaTeX build intermediates (keep paper_c.pdf tracked for GitHub + Zenodo archive)
+*.aux
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+build-pass-*.txt
+paper_c.txt
+verification_stdout.json
+
+# Python / OS artifacts
+__pycache__/
+*.pyc
+.DS_Store
