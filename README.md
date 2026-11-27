@@ -3,8 +3,7 @@
 **An Expository Companion and Modular Lean 4 Walkthrough for the Alpöge–Claude `grh-compact` Proof**
 
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](./LICENSE)
-<!-- Replace with the Zenodo DOI badge after enabling the GitHub–Zenodo webhook and publishing v1.0.0 -->
-<!-- [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.XXXXXXX.svg)](https://doi.org/10.5281/zenodo.XXXXXXX) -->
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24582528.svg)](https://doi.org/10.5281/zenodo.24582528)
 
 - **Read the paper:** [`paper_c.pdf`](./paper_c.pdf) (LaTeX source: [`paper_c.tex`](./paper_c.tex))
 - **Modular Lean 4 walkthrough spine:** [`lean/src/Readable/`](./lean/src/Readable/) (5 files, 15 public theorems, `1,271` LOC)

@@ -8,6 +8,14 @@ authors:
     affiliation: "Independent Researcher"
     orcid: "https://orcid.org/0000-0003-1569-321X"
 repository-code: "https://github.com/AugustBrenner/grh-compact-companion"
+doi: "10.5281/zenodo.24582528"
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.24582528"
+    description: "Zenodo Concept DOI (resolves to the latest version)"
+  - type: doi
+    value: "10.5281/zenodo.24582529"
+    description: "Zenodo archival DOI for v1.0.0"
 license: "Apache-2.0"
 keywords:
   - "Riemann hypothesis"
@@ -27,6 +35,7 @@ preferred-citation:
       affiliation: "Independent Researcher"
       orcid: "https://orcid.org/0000-0003-1569-321X"
   year: 2026
+  doi: "10.5281/zenodo.24582528"
   url: "https://github.com/AugustBrenner/grh-compact-companion"
 references:
   - type: article
