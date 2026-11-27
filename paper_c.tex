@@ -10,11 +10,12 @@
 \usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
 \renewcommand{\UrlFont}{\upshape\mdseries\ttfamily}
 \makeatletter
-\def\UrlBreaks{\do\/\do\-\do\.\do\:}
-\g@addto@macro\UrlSpecials{\do\_{\text{\upshape\mdseries\ttfamily\char95}\penalty\UrlBreakPenalty}}
+\def\UrlBreaks{\do\/\do\-\do\:}
+\g@addto@macro\UrlSpecials{\do\_{\text{\upshape\mdseries\ttfamily\char95}}}
+\newcommand{\keepstatus}{\@endparpenalty=10000\postdisplaypenalty=10000}
 \makeatother
 \newcommand{\code}[1]{\ifmmode\text{\normalfont\ttfamily\nolinkurl{#1}}\else{\upshape\mdseries\ttfamily\nolinkurl{#1}}\fi}
-\newcommand{\stmtstatus}[1]{\par\nopagebreak\smallskip\noindent{\normalfont\footnotesize\textit{Status:} #1.}\par}
+\newcommand{\stmtstatus}[1]{\par\nobreak\smallskip\noindent{\normalfont\footnotesize\textit{Status:} #1.}\par}
 \emergencystretch=1.2em
 \hypersetup{
   pdftitle={The Riemann Hypothesis via Multiplicity Chains},
@@ -113,6 +114,7 @@ When $q=1$, the unique character is $\chi\equiv 1$ and $L(s,1)=\zeta(s)$. Every 
 
 \begin{theorem}[Generalized Riemann Hypothesis and Riemann Hypothesis; Alp\"oge--Claude~\cite{Alpoge}]\label{thm:GRH}
 For every integer $q\ge 1$ and every Dirichlet character $\chi$ modulo $q$, $L(s,\chi)$ has no zeros in the half-plane $\re s>1/2$ (the simple pole at $s=1$ for principal $\chi$ excepted). By primitive reduction and the functional equation, every zero of $L(s,\chi)$ in the critical strip $0<\re s<1$---and in particular every nontrivial zero of $\zeta(s)$---lies on the critical line $\re s=1/2$.
+\stmtstatus{Proved in full in \S\ref{sec:close_grh} given Propositions~\ref{prop:quadtwist} and~\ref{prop:data} and Theorems~\ref{thm:A}--\ref{thm:C}; Lean: \code{src/Main.lean}, \code{src/Readable/Step4_MainProof.lean}}
 \end{theorem}
 
 Why do zeros of $\zeta(s)$ control prime numbers? Taking the logarithmic derivative of the Euler product gives
@@ -136,7 +138,7 @@ This manuscript is an expository companion to the compact Lean~4 formalization \
 \begin{itemize}
 \item \emph{Upstream formalization:} The proof of GRH is due to Levent Alp\"oge (with Claude)~\cite{Alpoge}. Inside the accompanying \code{lean/} directory, \code{src/Lib/}, \code{src/New/}, \code{src/Main.lean}, \code{src/Statements.lean}, and \code{lake-manifest.json} are packaged \textbf{byte-for-byte unmodified} from \code{lsernau/grh-lean} (\code{grh-compact/}, commit \code{72fead1}, Apache~2.0).
 \item \emph{Original additions:} We add only the modular five-file walkthrough spine \code{src/Readable/} (1,271~LOC), the build/audit entries in \code{lakefile.toml} and \code{scripts/PrintAxioms.lean}, this manuscript, and the standalone sanity-check script \code{verify_paper_c.py}.
-\item \emph{AI-assistance disclosure:} This expository companion, \code{src/Readable/}, and \code{verify_paper_c.py} were prepared with AI-assisted drafting and cross-checking and verified directly against the Lean~v4.35.0 kernel and executable checks.
+\item \emph{AI-assistance disclosure:} This expository companion, \code{src/Readable/}, and the check script \code{verify_paper_c.py} were prepared with AI-assisted drafting and cross-checking and verified directly against the Lean~v4.35.0 kernel and executable checks.
 \item \emph{Key architectural mechanisms in \code{grh-compact}:} Four mechanisms organize the compact codebase: (i)~the Cauchy-moment window lemma (Theorem~\ref{thm:window}), eliminating Siegel--Walfisz and the Prime Number Theorem in arithmetic progressions from the analytic endgame of Section~\ref{sec:analytic} (note that short-interval primes in arithmetic progressions~\cite[Cor.~11.19]{MV} are still used to build admissible data in Proposition~\ref{prop:data}); (ii)~a unified rank-$2$ Siegel-discriminant global Kloosterman sieve in Theorem~B; (iii)~full-chain generating-function Hecke inversion across all $m$ lifts in Theorem~A; and (iv)~direct cyclic-module annihilation via Higman's operator in Ribet's method in Theorem~C. Classical background theorems formalized in \code{src/Lib/} are cited with primary literature references.
 \end{itemize}
 
@@ -244,22 +246,22 @@ Symmetry / zero-freeness & Nonsquare twist $f\mapsto cf$ swaps $S_+$ and $S_-$ &
 \begin{figure}[tbp]
 \centering
 \begin{tikzpicture}[
-  node distance=5.5mm and 3.0mm,
-  box/.style={draw,rounded corners=2pt,align=center,font=\footnotesize,inner sep=3.5pt,text width=4.72cm},
-  half/.style={draw,rounded corners=2pt,align=center,font=\footnotesize,inner sep=4pt,text width=7.05cm},
-  wide/.style={draw,rounded corners=2pt,align=center,font=\footnotesize,inner sep=4.5pt,text width=14.8cm},
+  node distance=5.5mm and 2.2mm,
+  box/.style={draw,rounded corners=2pt,align=center,font=\footnotesize,inner sep=3.5pt,text width=4.88cm},
+  half/.style={draw,rounded corners=2pt,align=center,font=\footnotesize,inner sep=4pt,text width=7.25cm},
+  wide/.style={draw,rounded corners=2pt,align=center,font=\footnotesize,inner sep=4.5pt,text width=15.1cm},
   arr/.style={-{Stealth[length=2.2mm]},thick}
 ]
 \node[wide] (data) {\textbf{Admissible Data \& Behrend Sphere} (Props.~\ref{prop:behrend}, \ref{prop:data})\\Scale hierarchy $(x,x_1,b)$, thick places $\Phi_b$ avoiding $3$-term progressions, CM jets (\S\ref{sec:cm})};
 
-\node[box,below=6.5mm of data] (B) {\textbf{Theorem B} (Thm.~\ref{thm:B}, \S\ref{sec:thmB})\\Poincar\'e 2nd moment + rank-$2$ sieve\\$\Rightarrow$ Nearly spanning rows};
-\node[box,left=of B] (A) {\textbf{Theorem A} (Thm.~\ref{thm:A}, \S\ref{sec:thmA})\\Seesaw + CM jets + elem.\ divisors\\$\Rightarrow$ Short lifts \& small index};
-\node[box,right=of B] (C) {\textbf{Theorem C} (Thm.~\ref{thm:C}, \S\ref{sec:thmC})\\Volume pinch + 3 exchanges + Ribet/Kisin\\$\Rightarrow$ Covolume lower bound};
+\node[box,below=6.5mm of data] (B) {\textbf{Theorem B} (Thm.~\ref{thm:B}, \S\ref{sec:thmB})\\Poincar\'e 2nd moment\\+ rank-$2$ sieve\\$\Rightarrow$ Nearly spanning rows};
+\node[box,left=of B] (A) {\textbf{Theorem A} (Thm.~\ref{thm:A}, \S\ref{sec:thmA})\\Seesaw + CM jets\\+ elem.\ divisors\\$\Rightarrow$ Short lifts \& small index};
+\node[box,right=of B] (C) {\textbf{Theorem C} (Thm.~\ref{thm:C}, \S\ref{sec:thmC})\\Volume pinch, 3 exchanges,\\Ribet/Kisin\\$\Rightarrow$ Covolume lower bound};
 
 \node[wide,below=6.5mm of B] (star) {\textbf{Main Inequality $(\star)$} (Thm.~\ref{thm:star}): $m\,\rem \le fa(\log b)^5$ \quad ($\hmain$ cancels identically)};
 
-\node[half,below=6.5mm of star,xshift=-3.88cm] (win) {\textbf{Remainder Identity \& Cauchy Window}\\(Lem.~\ref{lem:rem_id}, Thm.~\ref{thm:window}; without Siegel--Walfisz)\\$\Rightarrow$ One-sided prime bound $R_{q_0}(x)\le x^{-1/2+8\eps}$};
-\node[half,below=6.5mm of star,xshift=3.88cm] (pv) {\textbf{Quadratic-Twist Avoidance}\\(Prop.~\ref{prop:quadtwist}; P\'olya--Vinogradov)\\Pick $d\equiv q_0/2-1$ avoiding twisted zeros};
+\node[half,below=6.5mm of star,xshift=-3.95cm] (win) {\textbf{Remainder Identity \& Cauchy Window}\\(Lem.~\ref{lem:rem_id}, Thm.~\ref{thm:window}; without Siegel--Walfisz)\\$\Rightarrow$ One-sided prime bound $R_{q_0}(x)\le x^{-1/2+8\eps}$};
+\node[half,below=6.5mm of star,xshift=3.95cm] (pv) {\textbf{Quadratic-Twist Avoidance}\\(Prop.~\ref{prop:quadtwist}; P\'olya--Vinogradov)\\Pick $d\equiv q_0/2-1$ avoiding twisted zeros};
 
 \node[wide,below=27mm of star] (grh) {\textbf{One-Sided Criterion \& Landau's Lemma} (Lem.~\ref{lem:landau}, Thm.~\ref{thm:criterion}) $\Longrightarrow$ \textbf{GRH \& RH} (Thm.~\ref{thm:GRH})};
 
@@ -270,8 +272,8 @@ Symmetry / zero-freeness & Nonsquare twist $f\mapsto cf$ swaps $S_+$ and $S_-$ &
 \draw[arr] (B.south) -- (star.north);
 \draw[arr] (C.south) -- ++(0,-3.2mm) -| ([xshift=28mm]star.north);
 \draw[arr] (star.south) -- ++(0,-3.2mm) -| (win.north);
-\draw[arr] (win.south) -- ([xshift=-38.8mm]grh.north);
-\draw[arr] (pv.south) -- ([xshift=38.8mm]grh.north);
+\draw[arr] (win.south) -- ([xshift=-39.5mm]grh.north);
+\draw[arr] (pv.south) -- ([xshift=39.5mm]grh.north);
 \end{tikzpicture}
 \caption{Logical architecture of the Alp\"oge--Claude proof of RH and GRH in \code{grh-compact}.}\label{fig:arch}
 \end{figure}
@@ -524,7 +526,7 @@ By~(H4), $|\sigma\mathrm{Gram}(1)|\le e^{c+n'b_{\mathrm{short}}}$ for all $\sigm
 \end{proof}
 
 \begin{remark}[Verifying~(H4) in the modular-form setting]\label{rem:pinch_mod}
-In \code{New/Endgame/LongForms.lean}:13, 47--48, hypothesis~(H4) is deduced from $\mathrm{CovolumeLe}(y,c)$ and $\|\Theta_1 z_j\|_\sigma^2\le e^{b_{\mathrm{short}}}$ ($\forall\sigma\in\operatorname{Aut}(\CC)$) in two steps: both Hadamard's (\code{covolumeSq_le}, \code{LevelForms.lean}:229) and Fischer's (\code{covolumeSq_elim_le}, \code{LevelForms.lean}:237) inequalities hold on the positive-semidefinite matrix $P_\sigma(w)$, bounding $\covol_\sigma^2(\Theta_1\circ w)\le e^{c+n'b_{\mathrm{short}}}$ for all $\sigma$, and the comparison lemma \code{norm_map_det_gram_le} (\code{LevelForms.lean}:219) then transfers this uniform bound to $|\sigma(\det\langle\Theta_1 w_i,\Theta_1 w_j\rangle)|$. Notice why this detour through $P_\sigma$ is essential: applying Fischer's inequality directly to $|\sigma(\det\langle\Theta_1 w_i,\Theta_1 w_j\rangle)|$ fails when $\sigma\in\operatorname{Aut}(\CC)$ does not commute with complex conjugation---for instance, taking $y=(1,0)$ and $z=(a,\sqrt{1-a^2})$ with $a=\sqrt{2}-1$ gives $\det\langle w_i,w_j\rangle=1-a^2=2\sqrt{2}-2$, whose conjugate under $\sqrt{2}\mapsto -\sqrt{2}$ has modulus $2+2\sqrt{2}>1$, even though both $y$ and $z$ are unit vectors.
+In \code{New/Endgame/LongForms.lean}:13, 47--48, hypothesis~(H4) is deduced from $\mathrm{CovolumeLe}(y,c)$ and $\|\Theta_1 z_j\|_\sigma^2\le e^{b_{\mathrm{short}}}$ ($\forall\sigma\in\operatorname{Aut}(\CC)$) in two steps: Hadamard's inequality (\code{covolumeSq_le}, \code{LevelForms.lean}:229) and Fischer's inequality (\code{covolumeSq_elim_le}, \code{LevelForms.lean}:237) both hold on the positive-semidefinite matrix $P_\sigma(w)$, bounding $\covol_\sigma^2(\Theta_1\circ w)\le e^{c+n'b_{\mathrm{short}}}$ for all $\sigma$, and the comparison lemma \code{norm_map_det_gram_le} (\code{LevelForms.lean}:219) then transfers this uniform bound to $|\sigma(\det\langle\Theta_1 w_i,\Theta_1 w_j\rangle)|$. Notice why this detour through $P_\sigma$ is essential: applying Fischer's inequality directly to $|\sigma(\det\langle\Theta_1 w_i,\Theta_1 w_j\rangle)|$ fails when $\sigma\in\operatorname{Aut}(\CC)$ does not commute with complex conjugation---for instance, taking $y=(1,0)$ and $z=(a,\sqrt{1-a^2})$ with $a=\sqrt{2}-1$ gives $\det\langle w_i,w_j\rangle=1-a^2=2\sqrt{2}-2$, whose conjugate under $\sqrt{2}\mapsto -\sqrt{2}$ has modulus $2+2\sqrt{2}>1$, even though both $y$ and $z$ are unit vectors.
 \end{remark}
 
 \subsection{Behrend's sphere: dodging three-term arithmetic progressions}
@@ -534,7 +536,7 @@ In Section~\ref{sec:thmC}, we require a large subset $\Phi_b$ of infinite places
 Let $L,H,n\ge 1$ be integers and $o\ge(LH)^n$. Then there exists $S\subset[0,o)$ of size $\#S\ge H^n/(nH^2)$ having no nontrivial solution to $(\alpha+\alpha')e_2\equiv\alpha e_1+\alpha'e_3\pmod o$ with $e_i\in S$, $\alpha,\alpha'>0$, and $\alpha+\alpha'\le L$. Consequently, for any homomorphism $\varphi\colon G\to H_{\mathrm{grp}}$ of abelian groups and elements $c,g\in G$ with $(LH)^n\le\ord(\varphi(g))$, the subset $\Phi_0:=\{cg^e:e\in S\}\subset G$ satisfies $\#\Phi_0\ge H^n/(nH^2)$ and $\varphi(\tau/\sigma)^j=\varphi(\rho/\sigma)^i\implies\varphi(\tau/\sigma)=1$ for all $0<i<j\le L$ and $\sigma,\tau,\rho\in\Phi_0$ (\code{behrend_three_term_free} in \code{Step2_BehrendSphere.lean}:127--132).
 \end{proposition}
 \begin{proof}
-Write numbers in base $B_0:=LH$ using $n$ digits $d=(d_0,\dots,d_{n-1})\in\{0,\dots,H-1\}^n$. Since $\alpha,\alpha'>0$ and $\alpha+\alpha'\le L$, each weighted digit satisfies $(\alpha+\alpha')d_k^{(2)},\,\alpha d_k^{(1)}+\alpha' d_k^{(3)}\le L(H-1)<B_0$, so base-$B_0$ addition produces no carries and both sides $(\alpha+\alpha')e_2$ and $\alpha e_1+\alpha'e_3$ lie strictly below $B_0^n\le o$. Hence $(\alpha+\alpha')e_2\equiv\alpha e_1+\alpha'e_3\pmod o$ holds if and only if the digit vectors obey the exact Euclidean equation $(\alpha+\alpha')d^{(2)}=\alpha d^{(1)}+\alpha' d^{(3)}$ in $\RR^n$.
+Write numbers in base $B_{\mathrm{base}}:=LH$ using $n$ digits $d=(d_0,\dots,d_{n-1})\in\{0,\dots,H-1\}^n$. Since $\alpha,\alpha'>0$ and $\alpha+\alpha'\le L$, each weighted digit satisfies $(\alpha+\alpha')d_k^{(2)},\,\alpha d_k^{(1)}+\alpha' d_k^{(3)}\le L(H-1)<B_{\mathrm{base}}$, so base-$B_{\mathrm{base}}$ addition produces no carries and both sides $(\alpha+\alpha')e_2$ and $\alpha e_1+\alpha'e_3$ lie strictly below $B_{\mathrm{base}}^n\le o$. Hence $(\alpha+\alpha')e_2\equiv\alpha e_1+\alpha'e_3\pmod o$ holds if and only if the digit vectors obey the exact Euclidean equation $(\alpha+\alpha')d^{(2)}=\alpha d^{(1)}+\alpha' d^{(3)}$ in $\RR^n$.
 
 Every digit vector has squared norm $\|d\|_2^2=\sum_{i=0}^{n-1}d_i^2\in\{0,1,\dots,n(H-1)^2\}$, so there are $n(H-1)^2+1\le nH^2$ possible spheres. By pigeonhole, some radius $R$ holds at least $H^n/(nH^2)$ digit vectors; let $S$ be the corresponding integers. For any $d^{(1)},d^{(2)},d^{(3)}$ on the sphere $\|d\|_2^2=R^2$ satisfying $(\alpha+\alpha')d^{(2)}=\alpha d^{(1)}+\alpha' d^{(3)}$, expanding the squared norms and substituting $\alpha d^{(1)}+\alpha' d^{(3)}=(\alpha+\alpha')d^{(2)}$ gives the weighted parallelogram identity (\code{sphere_no_weighted_midpoint} in \code{Step2_BehrendSphere.lean}:99--124)
 \begin{align*}
@@ -546,7 +548,7 @@ forcing $d^{(1)}=d^{(2)}$ and $d^{(3)}=d^{(2)}$. For the group-homomorphism stat
 \end{proof}
 
 \begin{example}[Worked Behrend sphere]
-For $L=3$, $H=5$, $n=3$, base $B_0=15$, $o=15^3=3375$, the sphere $d_0^2+d_1^2+d_2^2=17$ contains $\#S=9$ points ($\ge 125/75\approx 1.67$). Exhaustively testing all $3\times 9^3=2{,}187$ weighted triples $(\alpha,\alpha',e_1,e_2,e_3)$ in \code{verify_paper_c.py} confirms zero nontrivial solutions modulo $3375$.
+For $L=3$, $H=5$, $n=3$, base $B_{\mathrm{base}}=15$, $o=15^3=3375$, the sphere $d_0^2+d_1^2+d_2^2=17$ contains $\#S=9$ points ($\ge 125/75\approx 1.67$). Exhaustively testing all $3\times 9^3=2{,}187$ weighted triples $(\alpha,\alpha',e_1,e_2,e_3)$ in \code{verify_paper_c.py} confirms zero nontrivial solutions modulo $3375$.
 \end{example}
 
 \subsection{The scale hierarchy, symbol guide, and existence of admissible data}
@@ -728,7 +730,7 @@ for all admissible scales (closed in \code{Step4_MainProof.lean}:73--76 by \code
 
 Table~\ref{tab:cancel} summarizes the six structural cancellations that make $(\star)$ close cleanly across Sections~\ref{sec:data} and~\ref{sec:thmA}.
 
-\begin{table}[tbp]
+\begin{table}[htbp]
 \centering\footnotesize
 \caption{The six main cancellations and balances inside the proof of $(\star)$.}\label{tab:cancel}
 \begin{tabular}{@{}lll@{}}
@@ -788,11 +790,11 @@ Rescaling $G(u)=F(\varpi u)$ by a parameter $\varpi$ of $p$-adic valuation $\rho
  \end{cases}
 \]
 With $v(p)=1$ (so $v(\sqrt{-d})=\frac12$), summing the geometric series yields
-\begin{align}\label{eq:gammap}
- \gamma_p &\;=\; \frac{1}{p-1}-\rho_p \;=\; v(\pi_p)\sum_{e\in I_p}p^{-e}
+\begin{gather}\label{eq:gammap}
+ \gamma_p \;=\; \frac{1}{p-1}-\rho_p \;=\; v(\pi_p)\sum_{e\in I_p}p^{-e}
  \;=\; \begin{cases} p/(p^2-1),&\chi_K(p)=-1,\\ 1/(2p-2),&p=d,\end{cases}\\
- \frac{1-\chi_K(p^e)}{2} &\;=\; v(\pi_p)\mathbf{1}_{e\in I_p}.\nonumber
-\end{align}
+ \frac{1-\chi_K(p^e)}{2} \;=\; v(\pi_p)\mathbf{1}_{e\in I_p}.\notag
+\end{gather}
 For an inert prime such as $p=13$ (for $d=7$), $\frac{1}{12}-\frac{1}{168}=\frac{13}{168}=\frac{1}{13}+\frac{1}{13^3}+\frac{1}{13^5}+\cdots$, selecting precisely the odd powers where $1-\chi_K(13^e)=2$. In several variables indexed by $\sigma\in\Phi$, $\theta$ carries a small non-integral exponential factor $\exp(c_\varpi\Xi)$ coupling $z_\sigma^{p^e}$ with its partner $z_{-p^e\sigma}$; canceling these couplings before applying Legendre's formula costs $\min(y/p^e,\kappa(-p^e\sigma))$ factors of $\pi_p$, leaving the exact positive part $(y/p^e-\kappa(-p^e\sigma))_+$. Moreover, setting $c_\varpi:=\varpi^{p+1}/p$ gives $v(c_\varpi\pi_p)=(p+1)\rho_p-1+v(\pi_p)=\frac{1}{p-1}$, matching the $p$-adic convergence radius of $\exp(x)=\sum x^n/n!$.
 
 \begin{definition}[Normal form and partner couplings]\label{def:normal_form}
@@ -811,13 +813,13 @@ Let $C=(\Lambda,t_0,a_1)$ be an arithmetically normalized CM lattice datum (\cod
 \end{itemize}
 Let $\theta(z):=(U_{t_0}\sigma)(z)/(U_{t_0}\sigma)(0)$ be its normalized twisted translated Weierstrass $\sigma$-function embedded in $\CC_p$ ($p\ge 13$, $\chi_K(p)\ne 1$).
 \begin{enumerate}
-\item \emph{(Single-variable formal parameter)} There exist a formal parameter $T\in\mathcal{O}[[\varphi]]$ (\code{exists_formal_parameter}, \code{FormalParameter.lean}:125--140) with $T(\varpi X)=\varpi S$ ($S$ integral, $S(0)=0$, $S-S^{q_p}\equiv X\pmod{\pi_p}$) and an integral series
+\item \emph{(Single-variable formal parameter; \code{FormalParameter.lean}:125--140)} There exist a formal parameter $T\in\mathcal{O}[[\varphi]]$ (\code{exists_formal_parameter}) with $T(\varpi X)=\varpi S$ ($S$ integral, $S(0)=0$, $S-S^{q_p}\equiv X\pmod{\pi_p}$) and an integral series
 \[
  \psi \;\equiv\; u_0 X^2 + u_1 S^{p+1} + u_2 S^{p+q_p} \pmod{\pi_p}
 \]
 (with $u_0=0$ and $u_1\in\mathcal{O}^\times$ when $p$ is inert, $q_p=p^2$; and $q_p=p$ when $p=d$) such that for every $n$ coprime to $p$ there are a $p$-adic unit $\upsilon\in\mathcal{O}^\times$ and $\kappa_p\in\CC_p$ with $|\kappa_p|=p^{(1-\chi_K(p))/2-1/(p-1)}$ satisfying $(U_y\theta)(\varpi X)\in(\exp(\kappa_p\psi)\mathcal{O}[[X]])(\upsilon X)$ whenever $ny\in\Lambda$ (cf.~\cite{BKY,Katz81}).
 \item \emph{(Tight-frame theta products; \code{thetaProducts_normal_form}, \code{ThetaProducts.lean}:86--92)} Along an integral tight frame across $\Phi\times\mathcal{C}$ obeying global Frobenius conjugation, every theta product $\Theta=\prod_j(U_{y_j}\theta)(u_j^\dagger z)^{m_j}$ ($p\nmid M_{\mathrm{fr}}n$, scaling norm $r_{\mathrm{sc}}\le 1$) is integral on the null cone of couplings $\{e\le\log_p B:e\text{ odd or }p=d\}$ for every degree bound $B$ (\code{IsIntegralOnNullCone}). Moreover, when $p$ is inert ($\chi_K(p)=-1$) and $r_{\mathrm{sc}}=1$, $\Theta(\varpi z)$ admits the explicit exponential factorization $\exp(\kappa_p\Psi)V$ with $\Psi,V$ integral, $\Psi(0)=0$, and reduced partial derivative $\partial_x\overline{\Psi}$ supported with unit coefficients precisely at the partner monomials $z_y^{p^e}$ ($e$ odd, $-p^e y=x$).
-\end{enumerate}
+\keepstatus\end{enumerate}
 \stmtstatus{Proof sketch below; Lean: \code{New/Curve/FormalParameter.lean}, \code{New/Curve/ThetaProducts.lean}}
 \end{proposition}
 \begin{proof}[Proof sketch]
@@ -849,7 +851,7 @@ which retains all exponents $e\in I_p^\circ$ (including the ramified $e=0$ term 
 \begin{theorem}[Theta-jet divisibility and lift exponent]\label{thm:jet_div}
 Let $\chi_K(p)\ne 1$ and $v(\varpi)=\rho_p$.
 \begin{enumerate}
-\item \emph{(Minor-product jet bound; \code{norm_schurJet_le}, \code{New/Curve/JetDivisibility.lean}:65--71)} Let $F(z)$ be a power series in matrix variables indexed by $\Phi\times I_1\times I_2$ ($d':=|I_1|$) that is integral on the null cone of couplings $(I_p^\circ,\varpi,\pi_p)$ up to degree $B$. Fix exempted places $\mathrm{ev}\subset\Phi$, a diagram $\kappa_{\mathrm{diag}}$ of $B$ boxes satisfying \code{FitsRanks}$(I_2,I_1,\kappa_{\mathrm{diag}})$, and box charges $g_{\mathrm{chg}}$ nonzero at least at one endpoint of every coupling exempted by $\mathrm{ev}$ (i.e., whenever $\sigma\in\mathrm{ev}$, or $h=1$ and $-p^e\sigma\in\mathrm{ev}$). Writing $m_{\mathrm{chg}}$ for the total charge of the row's boxes, the minor-product jet $P(\partial)F(0)$ satisfies
+\item \emph{(Minor-product jet bound; \code{norm_schurJet_le}, \code{New/Curve/JetDivisibility.lean}:65--71)} Let $F(z)$ be a power series in matrix variables indexed by $\Phi\times I_1\times I_2$ ($d':=|I_1|$) that is integral on the null cone of couplings $(I_p^\circ,\varpi,\pi_p)$ up to degree $B$. Fix exempted places $\mathrm{ev}\subset\Phi$, a diagram $\kappa_{\mathrm{diag}}$ of $B$ boxes satisfying \code{FitsRanks}$(I_2,I_1,\kappa_{\mathrm{diag}})$, and box charges $g_{\mathrm{chg}}$ (indexed by place $\sigma\in\Phi$, Schur column height $h\in\{0,\dots,d'-1\}$, and box index) nonzero at least at one endpoint of every coupling exempted by $\mathrm{ev}$ (i.e., whenever $\sigma\in\mathrm{ev}$, or column height $h=1$ and $-p^e\sigma\in\mathrm{ev}$). Writing $m_{\mathrm{chg}}$ for the total charge of the row's boxes, the minor-product jet $P(\partial)F(0)$ satisfies
 \begin{equation}\label{eq:jet_bound}
  v_p\bigl(P(\partial)F(0)\bigr) \;\ge\; \mathrm{predDiv} - m_{\mathrm{chg}} - f(d')^3\bigl(1+\lfloor\log_p\max(B,1)\rfloor\bigr).
 \end{equation}
@@ -949,7 +951,7 @@ For every prime $p$ and $\iota\mid p$, there is an $\mathcal{O}_\iota$-submodule
 \item $\Psi$ is a good chain datum for $\vartheta$ (\code{IsGoodDatum}), and
 \item $\varphi\in S\cap\RamCol$ is a ramified column,
 \end{itemize}
-the image $\bB_\mu(\vartheta,\Psi,\varphi)$ obeys the $p$-adic valuation bound (\code{LocalStatement.lean}:285--288, \code{Data.exists_indexDvd_Bmu_divisible})
+the image $\bB_\mu(\vartheta,\Psi,\varphi)$ obeys the $p$-adic valuation bound (\code{LocalStatement.lean}:285--288; declaration \code{Data.exists_indexDvd_Bmu_divisible})
 \[
  v_p\bigl(\bB_\mu(\vartheta,\Psi,\varphi)\bigr) \;\ge\; \begin{cases}
   \lceil\mathrm{gain}_p-\mathrm{err}_p\rceil, & p<x_1\text{ nonsplit},\\
@@ -1072,11 +1074,11 @@ Hence any compatible square of theta lifts $U_1\to A\to U_2$ vs.\ $U_1\to A'\to 
 \begin{proposition}[Determinant factorization and crude auxiliary rows]\label{prop:det_aux}
 On $\Row$, set $\mathfrak{z}(\vartheta):=\det(\Theta_\vartheta^*\Theta_\vartheta)$ and $\lambda_j(\vartheta^j):=\det(u_{j,\vartheta}^* u_{j,\vartheta})$, where $u_{j,\vartheta}$ is the good lift at step $j$ (\code{Data.goodLift}).
 \begin{enumerate}
-\item \textbf{Chain factorization:} Moving adjoints across the $m$-step chain via Proposition~\ref{prop:exchange} and Rallis's inner-product formula~\cite{KR94,GQT} yields nonzero scalars $c(\vartheta)$ (\code{Data.volume_iota_eq_prod_liftVolume}, costing $m^2$ exchange squares, so under a fit family $|c(\theta_\iota)/c(1)|^{-2}$ has height $\le 2m^2 t x^{999}\le 2L_{\mathrm{cov}}$) with
+\item \textbf{Chain factorization:} Moving adjoints across the $m$-step chain via Proposition~\ref{prop:exchange} and Rallis's inner-product formula~\cite{KR94,GQT} yields nonzero scalars $c(\vartheta)$ (costing $m^2$ exchange squares, so under a fit family $|c(\theta_\iota)/c(1)|^{-2}$ has height $\le 2m^2 t x^{999}\le 2L_{\mathrm{cov}}$; \code{Data.volume_iota_eq_prod_liftVolume}) with
 \begin{equation}\label{eq:Z_factor}
  0\ne\mathfrak{z}(\vartheta) \;=\; |c(\vartheta)|^{d_T}\prod_{j=1}^m\lambda_j(\vartheta^j).
 \end{equation}
-\item \textbf{Crude auxiliary rows (\code{Data.crude_rows}):} Climbing an $m\times m$ exchange grid (\code{Data.hasRoute_succ}) yields scalars $\gamma(\vartheta)$ (whose inverse square height plus the untwisted archimedean norm bound of the spanning crude rows sums to at most $\frac14 b^3$, cf.~\code{LongForms.lean}:55) such that rows $z$ with $\gamma(\vartheta)\Theta_\vartheta z$ integral off the twist conductor span $\Row$.
+\item \textbf{Crude auxiliary rows:} Climbing an $m\times m$ exchange grid (\code{Data.hasRoute_succ}) yields scalars $\gamma(\vartheta)$ (whose inverse square height plus the untwisted archimedean norm bound of the spanning crude rows sums to at most $\frac14 b^3$, cf.~\code{LongForms.lean}:55) such that rows $z$ with $\gamma(\vartheta)\Theta_\vartheta z$ integral off the twist conductor span $\Row$ (\code{Data.crude_rows}).
 \end{enumerate}
 \stmtstatus{Summary; Lean: \code{New/Rows/RowVolume.lean}, \code{New/Exchange/CrudeRows.lean}}
 \end{proposition}
@@ -1100,7 +1102,7 @@ For a fit twist family $(\theta_\iota)$ and every $1\le j\le m$ (\code{heightLe_
 \stmtstatus{Summary; Lean: \code{New/Rows/LiftVolumeHeight.lean}}
 \end{proposition}
 \begin{proof}[Proof overview]
-Construct integral comparison forms $\mathrm{gl}_\vartheta$ on a definite auxiliary unitary group (\code{New/Rows/ComparisonForms.lean}, in the spirit of period-ratio integrality~\cite{Prasanna}) and form the compressed Gram operator $U_\vartheta:=\mathsf{h}_j\,\mathrm{pr}_{L_\vartheta}\circ\mathrm{gl}_\vartheta\circ\mathrm{gl}_\vartheta^*|_{L_\vartheta}$ on $L_\vartheta:=\operatorname{range}(u_{j,\vartheta})$. Three exchanges link $\det(\mathrm{gl}_\vartheta^*\circ u_{j,\vartheta})$ to a product of $k/2$ squared main $L$-value ratios (contributing $k$ factors) and $5m$ squared ramified $L$-value ratios. Thus $\lambda_j(1)/\lambda_j(\theta_\iota^j)$ factors into $\det(U_{\theta_\iota^j})/\det(U_1)$ times inverse critical $L$-value ratios. The Auerbach-basis $p$-adic estimate (\code{norm_det_compressedGramOp_padic_le}) and eigenvalue archimedean bound (\code{norm_det_compressedGramOp_arch_le}) bound $\det(U_{\theta_\iota^j})/\det(U_1)$ via $\sum\gamma_j(\ell)\le B_0$, while combining rank-$1$ theta-lift norm heights with CM jet divisibility (Theorem~\ref{thm:jet_div}) bounds each of the $k$ main-pair ratios by $O(B_0)-\hdir$, yielding~\eqref{eq:one_lift_bound}.
+Construct integral comparison forms $\mathrm{gl}_\vartheta$ on a definite auxiliary unitary group (\code{New/Rows/ComparisonForms.lean}, in the spirit of period-ratio integrality~\cite{Prasanna}) and form the compressed Gram operator $U_\vartheta:=\mathsf{h}_j\,\mathrm{pr}_{L_\vartheta}\circ\mathrm{gl}_\vartheta\circ\mathrm{gl}_\vartheta^*|_{L_\vartheta}$ on $L_\vartheta:=\operatorname{range}(u_{j,\vartheta})$, where $\mathsf{h}_j$ denotes the small hook number (\code{smallHookNumber}). Three exchanges link $\det(\mathrm{gl}_\vartheta^*\circ u_{j,\vartheta})$ to a product of $k/2$ squared main $L$-value ratios (contributing $k$ factors) and $5m$ squared ramified $L$-value ratios. Thus $\lambda_j(1)/\lambda_j(\theta_\iota^j)$ factors into $\det(U_{\theta_\iota^j})/\det(U_1)$ times inverse critical $L$-value ratios. The Auerbach-basis $p$-adic estimate (\code{norm_det_compressedGramOp_padic_le}) and eigenvalue archimedean bound (\code{norm_det_compressedGramOp_arch_le}) bound $\det(U_{\theta_\iota^j})/\det(U_1)$ via $\sum\gamma_j(\ell)\le B_0$, while combining rank-$1$ theta-lift norm heights with CM jet divisibility (Theorem~\ref{thm:jet_div}) bounds each of the $k$ main-pair ratios by $O(B_0)-\hdir$, yielding~\eqref{eq:one_lift_bound}.
 \end{proof}
 
 \begin{proof}[Proof of Theorem~\ref{thm:C} (\code{Data.integral_forms_long})]
@@ -1151,11 +1153,11 @@ Fix $\iota\mid\ell$.
  \mathrm{loss}_\ell \;:=\; 10^6\frac{m}{k}\bigl(b_1\,v_\ell(M)+\lambda_\ell\bigr).
 \]
 \begin{itemize}
-\item For small primes $\ell\le kt$, \textbf{Behrend sparsity of $\Phi_b$} (Proposition~\ref{prop:behrend}) is consumed in \code{New/Selmer/ThickSpacing.lean}:55 (\code{not_thick_of_short_arc}) to forbid three thick chart letters within a short Frobenius arc, guaranteeing a killing cut within $2J+1$ steps ($J:=\lfloor\log_\ell(h_2^3)\rfloor$) in \code{New/Lift/SparseThickLetters.lean}:200 (\code{scaledCupBounds_of_cut_windows} / \code{scaledCupBounds_sparse_thick}).
+\item For small primes $\ell\le kt$, \textbf{Behrend sparsity of $\Phi_b$} (Proposition~\ref{prop:behrend}) is consumed in \code{New/Selmer/ThickSpacing.lean}:55 (\code{not_thick_of_short_arc}) to forbid three thick chart letters within a short Frobenius arc, guaranteeing a killing cut within $2J+1$ steps ($J:=\lfloor\log_\ell(h_2^3)\rfloor$) via \code{scaledCupBounds_of_cut_windows} and \code{scaledCupBounds_sparse_thick} (\code{New/Lift/SparseThickLetters.lean}:198--205, 253--270).
 \item For $\lambda_\ell\ge h_2^3$ or $\ell\mid M$, an any-pattern unramified/tame chart bound contributes $O(\mathrm{rank}\cdot\mathrm{loss}_\ell)$.
 \item For generic large primes ($\ell>kt$, $\lambda_\ell<h_2^3$), at most $\mathrm{rank}\cdot m/k$ low jumps pay $b_1/\ell$.
 \end{itemize}
-In \code{New/Selmer/RibetElement.lean}:34--37, the full per-rank budget combines the global/ramified term with the crystalline term: $\operatorname{rowBudget}_D(\ell):=h_2^{27}(\mathrm{cr}_\ell+v_\ell(X))+4f\,\mathrm{loss}_\ell$, where $\mathrm{cr}_\ell:=v_\ell(|\barG_{\mathrm{chosen}}|)+2^{-\ell}$ (\code{crudeUnit}) and $X\in\NN$ bounds odd Tate-twist class-group lengths (\code{exists_length_shaOdd_le}). In \code{New/Selmer/FitTwistsExist.lean}:38--54, summing $\operatorname{rowBudget}_D(\ell)\log\ell$ over any finite prime set bounds the global/ramified term $h_2^{27}(\mathrm{cr}_\ell+v_\ell(X))$ by $\le B_0/2$ (via $\sum_\ell v_\ell(A)\log\ell\le\log^+ A$, $\sum_\ell 2^{-\ell}\log\ell<\infty$, and the class-number/discriminant bound) and the crystalline term $4f\,\mathrm{loss}_\ell$ by $\le B_0/2$ (via $\sum_\ell\lambda_\ell\log\ell\ll b_1\log b_1$), totaling $\le B_0=fa(\log b)^3/(mk)$ and closing Theorem~\ref{thm:reg_family}.
+In \code{New/Selmer/RibetElement.lean}:34--37, the full per-rank budget combines the global/ramified term with the crystalline term: $\operatorname{rowBudget}_D(\ell):=h_2^{27}(\mathrm{cr}_\ell+v_\ell(X))+4f\,\mathrm{loss}_\ell$, where $\mathrm{cr}_\ell:=v_\ell(|\barG_{\mathrm{chosen}}|)+2^{-\ell}$ (\code{crudeUnit}) and $X\in\NN$ bounds the odd Tate-twist class-group lengths (Lean declaration \code{exists_length_shaOdd_le}). In \code{New/Selmer/FitTwistsExist.lean}:38--54, summing $\operatorname{rowBudget}_D(\ell)\log\ell$ over any finite prime set bounds the global/ramified term $h_2^{27}(\mathrm{cr}_\ell+v_\ell(X))$ by $\le B_0/2$ (via $\sum_\ell v_\ell(A)\log\ell\le\log^+ A$, $\sum_\ell 2^{-\ell}\log\ell<\infty$, and the class-number/discriminant bound) and the crystalline term $4f\,\mathrm{loss}_\ell$ by $\le B_0/2$ (via $\sum_\ell\lambda_\ell\log\ell\ll b_1\log b_1$), totaling $\le B_0=fa(\log b)^3/(mk)$ and closing Theorem~\ref{thm:reg_family}.
 \end{proof}
 
 \section{Lean 4 Formalization and Verification}\label{sec:lean}
@@ -1168,7 +1170,7 @@ The Lean~4 formalization in the accompanying \code{lean/} directory is built on 
 \end{itemize}
 
 \begin{table}[tbp]
-\centering\scriptsize
+\centering\scriptsize\renewcommand{\arraystretch}{0.90}
 \caption{Cross-reference map between Paper~C's main results, the \code{src/Readable/} walkthrough spine, and the underlying \code{grh-compact} declarations.}\label{tab:leanmap}
 \begin{tabular}{@{}>{\raggedright\arraybackslash}p{.24\textwidth}>{\raggedright\arraybackslash}p{.35\textwidth}>{\raggedright\arraybackslash}p{.35\textwidth}@{}}
 \toprule
@@ -1199,10 +1201,10 @@ The complete Lean~v4.35.0 build (\texttt{cd lean \&\& lake exe cache get \&\& la
 \[
  \texttt{[propext,\; Classical.choice,\; Quot.sound]}.
 \]
-Note that \code{src/Main.lean} imports \code{New.Main} directly (the upstream proof entry point), while \code{src/Readable/Step4_MainProof.lean} independently re-derives the top-level assembly from \code{Data.short_forms}, \code{Data.enough_forms}, and \code{Data.heightLe_volume_rows}/\code{ratio_sq} to the exact public statements in \code{Statements.lean}.
+Note that \code{src/Main.lean} imports the upstream entry point \code{New.Main} directly. Independently, \code{src/Readable/Step4_MainProof.lean} re-derives the exact public statements of \code{Statements.lean} from \code{Data.short_forms}, \code{Data.enough_forms}, \code{Data.heightLe_volume_rows}, and the ratio-squared height bound \code{Data.heightLe_volume_ratio_sq}.
 
 Independently, our zero-dependency script \code{verify_paper_c.py} verifies elementary examples and finite algebraic sanity checks for this paper:
-\begin{itemize}
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
 \item \emph{Stepanov over $\FF_{101}$:} constructs an explicit nonzero polynomial for $y^2=x^3+x+1$ ($246$~unknowns, $235$~equations, degree $364\le 392$, all $52$~points of $S_+$ verified to order~$5$) and checks admissible odd-parameter ratios converging to $3\sqrt{3}$.
 \item \emph{Product formula, Legendre, and splitting:} checks $q=12/35$, $24$~Legendre factorial pairs including $v_{13}(1000!)=81$, and modulus splitting at $q_0=18480$ ($d=9239$, smallest nonsplit prime $19\ge 13$).
 \item \emph{Cauchy window and Behrend sphere:} checks Cauchy-window dominance across $R\in\{3.01,3.1,3.5,3.9\}$ and exhaustive freeness of all $2{,}187$ weighted triples on the $(3,5,3)$ Behrend sphere.
@@ -1211,11 +1213,12 @@ Independently, our zero-dependency script \code{verify_paper_c.py} verifies elem
 \end{itemize}
 
 \section{Primary-Source Check of Masullo's 940-Page Draft}\label{sec:masullo}
+\enlargethispage{2\baselineskip}
 
 Because Alessandro Maria Masullo circulated a 940-page draft manuscript \emph{The Music of the Primes}~\cite{Masullo} (distinct from Marcus du Sautoy's 2003 book of the same title) in the same month---stating its intended generality on p.~6 as \emph{``all number fields, all unitary Hecke characters''} via a Connes-inspired~\cite{Connes} Hardy--Sobolev spectral trace-formula program, and noting on p.~6 both that \emph{``The math is complete, and only filling in some writing remains on several parts across this long paper''} and that he was \emph{``advised to release the current version as it is''} while \emph{``aware of several glitches here and there''}---we audited the primary PDF against its printed pagination to check whether a complete alternative proof was already available there. Direct inspection verifies four unfinished or contradictory passages at the load-bearing conclusion of the draft (Table~\ref{tab:masullo}).
 
 \begin{table}[tbp]
-\centering\footnotesize
+\centering\footnotesize\renewcommand{\arraystretch}{0.92}
 \caption{Source-verified unfinished components in Masullo's November 2026 draft~\cite{Masullo}.}\label{tab:masullo}
 \begin{tabular}{@{}>{\raggedright\arraybackslash}p{.21\textwidth}>{\raggedright\arraybackslash}p{.18\textwidth}>{\raggedright\arraybackslash}p{.54\textwidth}@{}}
 \toprule
@@ -1232,7 +1235,7 @@ Thm.~10.4.2.8 (pp.~463--464) & Spectral convolution & Key input cited on p.~520;
 \end{tabular}
 \end{table}
 
-Additional unfinished author notes (\emph{``Finish!''}, \emph{``Return here.''}, \emph{``Extend Definition~9.3.3.1''}) appear on pp.~27, 446, and 514--515. (By contrast, Remark~10.2.1.5 on p.~444 observes that $\{x_m\}$ is not a Schauder basis but immediately introduces strongly convergent orthogonal projectors $Q_{\chi,N}$ as a replacement, so that remark is a design note rather than an unfinished proof.) Beyond these unfinished sections, a direct functional-analytic check of Masullo's fixed-strip mechanism on the centered Hardy--Sobolev space $W_I^{s,2}(C_F)$ with symmetric strip $I=[-\alpha,\alpha]$ ($0\le\alpha<1/2$), weight $w_{I,s}(t)=\max\{t^{-2\alpha},t^{2\alpha}\}(1+|\log t|^2)^{s/2}$, and centered zero coordinate $z:=\rho-1/2$ identifies three elementary obstructions: for $0\le\alpha<1/2$, the Euler-factor chop $1-q_v^{-1/2}\chi(\pi_v)T_{\pi_v}$ has summable operator powers and is therefore invertible on $W_I^{s,2}$ (collapsing its orbital subquotients on closed invariant subspaces); off-strip Mellin evaluations at $|\re z|>\alpha$ are unbounded on $W_I^{s,2}$ (so the strip projection $P_I^{\mathrm{geom}}$ cannot detect off-strip zeros); and the odd-integer Sobolev boundary-jet endpoint $m=(s-1)/2$ diverges (e.g.\ $\int_{-\infty}^{\infty} u^2(1+u^2)^{-3/2}\,du=\infty$ at $s=3, m=1$). Thus no complete proof of RH or GRH is present in the November 2026 draft of~\cite{Masullo}.
+Additional unfinished author notes (\emph{``Finish!''}, \emph{``Return here.''}, \emph{``Extend Definition~9.3.3.1''}) appear on pp.~27, 446, and 514--515. (By contrast, Remark~10.2.1.5 on p.~444 observes that $\{x_m\}$ is not a Schauder basis but immediately introduces strongly convergent orthogonal projectors $Q_{\chi,N}$ as a replacement, so that remark is a design note rather than an unfinished proof.) Beyond these unfinished sections, a direct functional-analytic check of Masullo's fixed-strip mechanism on the centered Hardy--Sobolev space $W_I^{s,2}(C_F)$ with symmetric strip $I=[-\alpha,\alpha]$ ($0\le\alpha<1/2$), weight $w_{I,s}(t)=\max\{t^{-2\alpha},t^{2\alpha}\}(1+|\log t|^2)^{s/2}$, and centered zero coordinate $z:=\rho-1/2$ identifies three elementary obstructions: for $0\le\alpha<1/2$, the Euler-factor chop $1-q_v^{-1/2}\chi(\pi_v)T_{\pi_v}$ has summable operator powers and is therefore invertible on $W_I^{s,2}$ (collapsing its orbital subquotients on closed invariant subspaces); off-strip Mellin evaluations at $|\re z|>\alpha$ are unbounded on $W_I^{s,2}$ (so Masullo's geometric projection $P_a^{\mathrm{geom}}$ on $W_I^{s,2}(C_F)$ cannot detect off-strip zeros); and the odd-integer Sobolev boundary-jet endpoint $m=(s-1)/2$ diverges (e.g.\ $\int_{-\infty}^{\infty} u^2(1+u^2)^{-3/2}\,du=\infty$ at $s=3, m=1$). Thus no complete proof of RH or GRH is present in the November 2026 draft of~\cite{Masullo}.
 
 \enlargethispage{2\baselineskip}
 \begin{thebibliography}{99}
@@ -1259,7 +1262,7 @@ Additional unfinished author notes (\emph{``Finish!''}, \emph{``Return here.''},
 \bibitem{KR94} S. S. Kudla and S. Rallis, \emph{A regularized Siegel--Weil formula: the first term identity}, Ann. of Math. (2) \textbf{140} (1994), 1--80.
 \bibitem{Labesse} J.-P. Labesse, \emph{Changement de base CM et s\'eries discr\`etes}, in \emph{On the Stabilization of the Trace Formula}, Int. Press, 2011, pp.~429--470.
 \bibitem{Landau} E. Landau, \emph{\"Uber einen Satz von Tschebyschef}, Math. Ann. \textbf{61} (1905), 527--550.
-\bibitem{Masullo} A. M. Masullo, \emph{The Music of the Primes}, draft manuscript, November 2026 (940 pp.), \url{https://math216.wordpress.com/wp-content/uploads/2026/11/the-music-of-the-primes.pdf} (unrelated to M. du Sautoy's 2003 book of the same title).
+\bibitem{Masullo} A. M. Masullo, \emph{The Music of the Primes}, draft manuscript (940~pp.), November 2026, available at \url{https://math216.wordpress.com/wp-content/uploads/2026/11/the-music-of-the-primes.pdf} (unrelated to M. du Sautoy's 2003 book of the same title).
 \bibitem{MV} H. L. Montgomery and R. C. Vaughan, \emph{Multiplicative Number Theory I: Classical Theory}, Cambridge Stud. Adv. Math. \textbf{97}, Cambridge Univ. Press, 2007.
 \bibitem{Petersson} H. Petersson, \emph{\"Uber die Entwicklungskoeffizienten der automorphen Formen}, Acta Math. \textbf{58} (1932), 169--215.
 \bibitem{Prasanna} K. Prasanna, \emph{Integrality of a ratio of Petersson norms and level-lowering congruences}, Ann. of Math. (2) \textbf{163} (2006), 901--967.
