@@ -24,26 +24,59 @@ jobs:
       - name: Validate Zenodo metadata JSON
         run: python3 -m json.tool .zenodo.json > /dev/null
 
-      - name: Check Lean walkthrough files for sorry/admit/custom axioms
+      - name: Check all 799 Lean source files for forbidden tokens
         run: |
           python3 - <<'PY'
           from pathlib import Path
           import re
-          targets = sorted(Path("lean/src/Readable").glob("Step*.lean")) + [
-              Path("lean/src/Main.lean"),
-              Path("lean/src/Statements.lean"),
-          ]
-          assert len(targets) == 7, f"Unexpected Lean target count: {targets}"
+          def strip_lean_comments_and_strings(src: str) -> str:
+              out = []
+              i, n, depth = 0, len(src), 0
+              in_str = False
+              while i < n:
+                  if in_str:
+                      if src[i] == '\\' and i + 1 < n:
+                          i += 2
+                          continue
+                      if src[i] == '"':
+                          in_str = False
+                      i += 1
+                      continue
+                  if depth > 0:
+                      if src[i:i+2] == '/-':
+                          depth += 1
+                          i += 2
+                      elif src[i:i+2] == '-/':
+                          depth -= 1
+                          i += 2
+                      else:
+                          i += 1
+                      continue
+                  if src[i:i+2] == '/-':
+                      depth = 1
+                      out.append(' ')
+                      i += 2
+                  elif src[i:i+2] == '--':
+                      while i < n and src[i] != '\n':
+                          i += 1
+                  elif src[i] == '"':
+                      in_str = True
+                      out.append(' ')
+                      i += 1
+                  else:
+                      out.append(src[i])
+                      i += 1
+              return ''.join(out)
+          targets = sorted(Path("lean/src").rglob("*.lean"))
+          assert len(targets) == 799, f"Unexpected Lean source count: {len(targets)}"
           bad = []
+          pat = re.compile(r"\b(sorry|admit|axiom|unsafe|native_decide|implemented_by)\b")
           for p in targets:
-              text = p.read_text(encoding="utf-8")
-              # Strip line and block comments before checking tokens
-              cleaned = re.sub(r"/-.*?-/", "", text, flags=re.S)
-              cleaned = re.sub(r"--.*", "", cleaned)
-              if re.search(r"\b(sorry|admit|axiom)\b", cleaned):
+              cleaned = strip_lean_comments_and_strings(p.read_text(encoding="utf-8"))
+              if pat.search(cleaned):
                   bad.append(str(p))
           assert not bad, f"Disallowed tokens found in: {bad}"
-          print(f"Verified {len(targets)} Lean spine/root files: zero sorry/admit/axiom tokens.")
+          print(f"Verified all {len(targets)} Lean source files in lean/src/: zero forbidden tokens.")
           PY
 
       - name: Install TeX Live & poppler-utils
@@ -62,7 +95,7 @@ jobs:
         run: |
           if ! ./build.sh; then
             echo "=== Matching lines in paper_c.log ==="
-            grep -niE '(^!|undefined|Rerun to get|Label\(s\) may have changed|pdfTeX warning|Font Warning|Overfull|Underfull)' paper_c.log | head -n 50 || true
+            grep -niE '(^!|undefined|Rerun to get|Label\(s\) may have changed|LaTeX Warning:|Package [^:]+ Warning:|Class [^:]+ Warning:|pdfTeX warning|Font Warning|Overfull|Underfull)' paper_c.log | head -n 50 || true
             exit 1
           fi
 

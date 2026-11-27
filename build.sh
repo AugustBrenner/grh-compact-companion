@@ -25,7 +25,7 @@ PAPER_C_BUILD_PASSES="$pass" python3 -I - <<'PY'
 from pathlib import Path
 import re, json, os, subprocess
 log = Path('paper_c.log').read_text(encoding='latin-1')
-assert not re.search(r'(^!|undefined|Rerun to get|Label\(s\) may have changed|pdfTeX warning|Font Warning)', log, re.M | re.I), "LaTeX errors, warnings, or undefined refs"
+assert not re.search(r'(^!|undefined|Rerun to get|Label\(s\) may have changed|LaTeX Warning:|Package [^:\n]+ Warning:|Class [^:\n]+ Warning:|pdfTeX warning|Font Warning)', log, re.M | re.I), "LaTeX errors, warnings, or undefined refs"
 over_h = [float(x) for x in re.findall(r'Overfull \\hbox \(([0-9.]+)pt too wide\)', log)]
 over_v = [float(x) for x in re.findall(r'Overfull \\vbox \(([0-9.]+)pt too high\)', log)]
 under_h = [int(x) for x in re.findall(r'Underfull \\hbox \(badness (\d+)\)', log)]
