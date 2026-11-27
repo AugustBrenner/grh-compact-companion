@@ -6,6 +6,7 @@ authors:
   - family-names: "Brenner"
     given-names: "August"
     affiliation: "Independent Researcher"
+    orcid: "https://orcid.org/0000-0003-1569-321X"
 repository-code: "https://github.com/AugustBrenner/grh-compact-companion"
 license: "Apache-2.0"
 keywords:

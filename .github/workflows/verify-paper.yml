@@ -59,7 +59,12 @@ jobs:
             poppler-utils
 
       - name: Build paper_c.pdf with strict zero-warning/zero-box check
-        run: ./build.sh
+        run: |
+          if ! ./build.sh; then
+            echo "=== Matching lines in paper_c.log ==="
+            grep -niE '(^!|undefined|Rerun to get|Label\(s\) may have changed|pdfTeX warning|Font Warning|Overfull|Underfull)' paper_c.log | head -n 50 || true
+            exit 1
+          fi
 
       - name: Upload built PDF and verification reports
         uses: actions/upload-artifact@v4
